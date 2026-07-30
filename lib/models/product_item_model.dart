@@ -47,7 +47,7 @@ const List<ProductItemModel> dummyProducts = [
     price: 799.0,
     oldPrice: 899.0,
     discount: 11,
-    imageUrl: 'assets/images/apple_watch_ultra_2.webp',
+    imageUrl: 'assets/images/apple_watch_ultra 2.webp',
     rating: 4.9,
     reviewCount: 1824,
     description: 'Premium smartwatch with advanced health tracking, GPS, and long battery life.',

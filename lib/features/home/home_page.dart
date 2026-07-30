@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:velora/constants/app_spacing.dart';
 import 'package:velora/features/home/widgets/categories_home.dart';
+import 'package:velora/features/home/widgets/featured_section.dart';
 import 'package:velora/features/home/widgets/home_carousel.dart';
 import 'package:velora/features/home/widgets/header.dart';
 import 'package:velora/features/home/widgets/section_home.dart';
@@ -36,7 +37,8 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: AppSpacing.xl),
-                SectionHome(title: "Featured Product",icon: Icons.star,color: Colors.amber,)
+                FeaturedSection()
+                
               ],
             ),
           ),
