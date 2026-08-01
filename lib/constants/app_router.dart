@@ -9,7 +9,8 @@ class AppRouter {
       case AppRoutes.customBottomRoute:
         return MaterialPageRoute(builder: (_) => const CustomBageNavbar());
       case AppRoutes.producDetailsRoute:
-        return MaterialPageRoute(builder: (_) => const ProductDetailsPage());
+        final String productId = settings.arguments as String;
+        return MaterialPageRoute(builder: (_) =>  ProductDetailsPage(productId:productId));
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

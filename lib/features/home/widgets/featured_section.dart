@@ -31,7 +31,7 @@ class FeaturedSection extends StatelessWidget {
 
           itemBuilder: (context, index) => InkWell(
             onTap: () {
-              Navigator.of(context,rootNavigator: true).pushNamed(AppRoutes.producDetailsRoute);
+              Navigator.of(context,rootNavigator: true).pushNamed(AppRoutes.producDetailsRoute,arguments: featuredProducts[index].id);
             },
             child: FeaturedProduct(product: featuredProducts[index]),
           ),
