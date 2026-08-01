@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:velora/features/home/widgets/featured_product.dart';
+import 'package:velora/features/home/widgets/recommend_card.dart';
 import 'package:velora/features/home/widgets/section_home.dart';
 import 'package:velora/models/product_item_model.dart';
 
-class FeaturedSection extends StatelessWidget {
-  const FeaturedSection({super.key});
+class RecommendSection extends StatelessWidget {
+  const RecommendSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final featuredProducts = dummyProducts.where((e) => e.isFeatured).toList();
-    return Column(
+    final recommendItems = dummyProducts.where((e) => e.isRecommended).toList();
+    return  Column(
       children: [
         SectionHome(
-          title: "Featured Product",
-          icon: Icons.star,
-          color: Colors.amber,
+          title: "Recommend For You",
         ),
         GridView.builder(
           shrinkWrap: true,
-          itemCount: featuredProducts.length,
+          itemCount: recommendItems.length,
         
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -29,7 +27,7 @@ class FeaturedSection extends StatelessWidget {
           ),
           
           itemBuilder: (context, index) =>
-              FeaturedProduct(product: featuredProducts[index]),
+              RecommendCard(product: recommendItems[index]),
         ),
       ],
     );

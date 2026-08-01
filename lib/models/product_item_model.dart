@@ -207,6 +207,8 @@ const List<ProductItemModel> dummyProducts = [
     imageUrl: 'assets/images/keychron_k8_pro.jfif',
     rating: 4.8,
     reviewCount: 902,
+    oldPrice:59,
+    discount: 10,
     description: 'Wireless mechanical keyboard with hot-swappable switches.',
     categoryName: 'Accessories',
     isFlashSale: true,
