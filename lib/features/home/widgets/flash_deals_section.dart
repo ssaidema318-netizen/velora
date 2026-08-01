@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:velora/constants/app_routes.dart';
 import 'package:velora/features/home/widgets/flash_deal_card.dart';
 import 'package:velora/features/home/widgets/section_home.dart';
 import 'package:velora/models/product_item_model.dart';
@@ -20,7 +21,8 @@ class FlashDealsSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             itemBuilder: (context, index) =>
-                FlashDealCard(product: flahDeals[index]),
+                InkWell(onTap: (){Navigator.of(context,rootNavigator: true).pushNamed(AppRoutes.producDetailsRoute);},
+                  child: FlashDealCard(product: flahDeals[index])),
           ),
         ),
       ],

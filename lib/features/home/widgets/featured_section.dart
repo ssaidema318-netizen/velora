@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:velora/constants/app_routes.dart';
 import 'package:velora/features/home/widgets/featured_product.dart';
 import 'package:velora/features/home/widgets/section_home.dart';
 import 'package:velora/models/product_item_model.dart';
@@ -19,17 +20,21 @@ class FeaturedSection extends StatelessWidget {
         GridView.builder(
           shrinkWrap: true,
           itemCount: featuredProducts.length,
-        
+
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 252,
             crossAxisSpacing: 5,
-    mainAxisSpacing: 16,
-    childAspectRatio: 0.62,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.62,
           ),
-          
-          itemBuilder: (context, index) =>
-              FeaturedProduct(product: featuredProducts[index]),
+
+          itemBuilder: (context, index) => InkWell(
+            onTap: () {
+              Navigator.of(context,rootNavigator: true).pushNamed(AppRoutes.producDetailsRoute);
+            },
+            child: FeaturedProduct(product: featuredProducts[index]),
+          ),
         ),
       ],
     );

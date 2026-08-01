@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:velora/constants/app_routes.dart';
 import 'package:velora/features/home/widgets/recommend_card.dart';
 import 'package:velora/features/home/widgets/section_home.dart';
 import 'package:velora/models/product_item_model.dart';
@@ -27,7 +28,8 @@ class RecommendSection extends StatelessWidget {
           ),
           
           itemBuilder: (context, index) =>
-              RecommendCard(product: recommendItems[index]),
+              InkWell(onTap:(){Navigator.of(context,rootNavigator: true).pushNamed(AppRoutes.producDetailsRoute);},
+              child:  RecommendCard(product: recommendItems[index])),
         ),
       ],
     );

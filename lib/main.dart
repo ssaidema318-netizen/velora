@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:velora/constants/app_router.dart';
 import 'package:velora/features/bottom_navbar/custom_bottom_navbar.dart';
 
 void main() {
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: CustomBageNavbar(),
       debugShowCheckedModeBanner: false,
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }
