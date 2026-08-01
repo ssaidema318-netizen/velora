@@ -10,26 +10,30 @@ class RecommendSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final recommendItems = dummyProducts.where((e) => e.isRecommended).toList();
-    return  Column(
+    return Column(
       children: [
-        SectionHome(
-          title: "Recommend For You",
-        ),
+        SectionHome(title: "Recommend For You"),
         GridView.builder(
           shrinkWrap: true,
           itemCount: recommendItems.length,
-        
+
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 252,
             crossAxisSpacing: 5,
-    mainAxisSpacing: 16,
-    childAspectRatio: 0.62,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.62,
           ),
-          
-          itemBuilder: (context, index) =>
-              InkWell(onTap:(){Navigator.of(context,rootNavigator: true).pushNamed(AppRoutes.producDetailsRoute);},
-              child:  RecommendCard(product: recommendItems[index])),
+
+          itemBuilder: (context, index) => InkWell(
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).pushNamed(
+                AppRoutes.producDetailsRoute,
+                arguments: recommendItems[index].id,
+              );
+            },
+            child: RecommendCard(product: recommendItems[index]),
+          ),
         ),
       ],
     );

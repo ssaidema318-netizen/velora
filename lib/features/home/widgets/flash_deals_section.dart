@@ -20,9 +20,15 @@ class FlashDealsSection extends StatelessWidget {
             itemCount: flahDeals.length,
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            itemBuilder: (context, index) =>
-                InkWell(onTap: (){Navigator.of(context,rootNavigator: true).pushNamed(AppRoutes.producDetailsRoute);},
-                  child: FlashDealCard(product: flahDeals[index])),
+            itemBuilder: (context, index) => InkWell(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).pushNamed(
+                  AppRoutes.producDetailsRoute,
+                  arguments: flahDeals[index].id,
+                );
+              },
+              child: FlashDealCard(product: flahDeals[index]),
+            ),
           ),
         ),
       ],
