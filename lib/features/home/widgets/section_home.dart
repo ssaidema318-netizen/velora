@@ -16,7 +16,7 @@ class SectionHome extends StatelessWidget {
                       children: [
                         Icon(icon,color: color,size: 30,),
                         Text(
-                          "${title}",
+                          title,
                           style: Theme.of(context).textTheme.headlineSmall!
                               .copyWith(fontWeight: FontWeight.w700),
                         ),

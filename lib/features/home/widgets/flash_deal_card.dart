@@ -52,7 +52,7 @@ class FlashDealCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: AppSpacing.m,right: AppSpacing.m),
               child: Text(
-                "${product.name}",
+                product.name,
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),

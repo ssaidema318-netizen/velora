@@ -4,7 +4,8 @@ import 'package:velora/constants/app_colors.dart';
 class IconBotton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onPressed;
-  const IconBotton({super.key, required this.icon, required this.onPressed});
+  final Color? color;
+  const IconBotton({super.key, required this.icon, required this.onPressed,  this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class IconBotton extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: AppColors.border
       ),
-      child: IconButton(onPressed: onPressed, icon:Icon(icon,size: 30,) ),
+      child: IconButton(onPressed: onPressed, icon:Icon(icon,size: 30,color: color,) ),
     );
   }
 }

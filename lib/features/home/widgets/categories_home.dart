@@ -24,7 +24,7 @@ class CategoriesHome extends StatelessWidget {
             child: HugeIcon(icon: categoryItem.icon),
           ),
         ),
-        Text("${categoryItem.title}",style: Theme.of(context).textTheme.labelLarge,),
+        Text(categoryItem.title,style: Theme.of(context).textTheme.labelLarge,),
       ],
     );
   }

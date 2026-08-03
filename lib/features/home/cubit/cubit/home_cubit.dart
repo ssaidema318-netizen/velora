@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart' hide CarouselSlider;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/models/carousel_slider.dart';
 import 'package:velora/models/categories_home_model.dart';
