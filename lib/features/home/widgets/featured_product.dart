@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_spacing.dart';
-import 'package:velora/models/product_item_model.dart';
 import 'package:velora/widgets/icon_botton.dart';
 
 class FeaturedProduct extends StatelessWidget {
-  final ProductItemModel product;
+  final product;
 
   const FeaturedProduct({super.key, required this.product});
 
@@ -36,7 +35,8 @@ class FeaturedProduct extends StatelessWidget {
                   padding: const EdgeInsets.all(AppSpacing.md),
                   child: AspectRatio(
                     aspectRatio: 0.85,
-                    child: Image.asset(product.imageUrl, fit: BoxFit.cover),
+                    child: Hero(tag: product.id,
+                    child: Image.asset(product.imageUrl, fit: BoxFit.cover)),
                   ),
                 ),
                 Positioned(

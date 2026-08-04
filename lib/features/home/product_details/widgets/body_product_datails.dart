@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_spacing.dart';
+import 'package:velora/features/home/product_details/cubit/product_details_cubit.dart';
+import 'package:velora/features/home/product_details/widgets/information_product.dart';
 import 'package:velora/models/product_item_model.dart';
-import 'package:velora/widgets/icon_botton.dart';
 
 class BodyProductDatails extends StatelessWidget {
   const BodyProductDatails({super.key, required this.product});
@@ -23,7 +25,10 @@ class BodyProductDatails extends StatelessWidget {
           width: size.width * 1,
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.md),
-            child: Image(image: AssetImage(product.imageUrl)),
+            child: Hero(
+              tag: product.id,
+              child: Image(image: AssetImage(product.imageUrl)),
+            ),
           ),
         ),
         Positioned(
@@ -41,68 +46,32 @@ class BodyProductDatails extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product.name,
-                            style: Theme.of(context).textTheme.titleLarge!
-                                .copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 30,
-                                ),
-                          ),
-                          SizedBox(height: AppSpacing.m),
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "⭐ ${product.rating}   ",
-                                  style: Theme.of(context).textTheme.labelLarge!
-                                      .copyWith(fontWeight: FontWeight.w700),
-                                ),
-                                TextSpan(
-                                  text: " (${product.reviewCount} reviews)",
-                                  style: Theme.of(context).textTheme.labelLarge!
-                                      .copyWith(color: AppColors.iconSecondary),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        height: 100,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          color: AppColors.background,
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconBotton(
-                              onPressed: () {},
-                              icon: Icons.remove,
-                              color: AppColors.primary,
-                            ),
-                            Text("1"),
-                            IconBotton(
-                              onPressed: () {},
-                              icon: Icons.add,
-                              color: AppColors.primary,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
+                    bloc: BlocProvider.of<ProductDetailsCubit>(context),
+                    buildWhen: ((previous, current) =>
+                        current is QuantityCounterLoaded ||
+                        current is ProdctDetailsLoaded),
+                    builder: (context, state) {
+                      if (state is QuantityCounterLoaded) {
+                        return InformationProduct(
+                          product: product,
+                          value: state.value,
+                          cubit: BlocProvider.of<ProductDetailsCubit>(context),
+                        );
+                      } else if (state is ProdctDetailsLoaded) {
+                        return InformationProduct(
+                          product: product,
+                          value: state.productItem.quantity,
+                          cubit: BlocProvider.of<ProductDetailsCubit>(context),
+                        );
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    },
                   ),
                   SizedBox(height: AppSpacing.m),
                   Text(
-                    "Descrption",
+                    "Description",
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -122,10 +91,10 @@ class BodyProductDatails extends StatelessWidget {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          blurRadius: 24,
+                          color: Colors.black.withValues(alpha: 0.12),
+                          blurRadius: 25,
                           spreadRadius: 0,
-                          offset: const Offset(0, 8),
+                          offset: const Offset(0, 10),
                         ),
                       ],
                       color: AppColors.background,
@@ -142,39 +111,97 @@ class BodyProductDatails extends StatelessWidget {
                               children: [
                                 Text("Toal Price"),
                                 SizedBox(height: AppSpacing.m),
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: "\$",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium!
-                                            .copyWith(color: AppColors.primary),
-                                      ),
-                                      TextSpan(
-                                        text: "${product.price}",
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.titleMedium,
-                                      ),
-                                    ],
+                                BlocBuilder<
+                                  ProductDetailsCubit,
+                                  ProductDetailsState
+                                >(
+                                  bloc: BlocProvider.of<ProductDetailsCubit>(
+                                    context,
                                   ),
+                                  buildWhen: ((previous, current) =>
+                                      current is QuantityCounterLoaded ||
+                                      current is ProdctDetailsLoaded),
+                                  builder: (context, state) {
+                                    int quantity = 1;
+                                    if (state is QuantityCounterLoaded) {
+                                      quantity = state.value;
+                                    } else if (state is ProdctDetailsLoaded) {
+                                      quantity = state.productItem.quantity;
+                                    }
+                                    return Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "\$",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium!
+                                                .copyWith(
+                                                  color: AppColors.primary,
+                                                ),
+                                          ),
+                                          TextSpan(
+                                            text: "${quantity * product.price}",
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.titleMedium,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
                           ),
                           Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {},
-                              icon: Icon(Icons.shopping_bag_outlined),
-                              label: Text("Add Cart"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primary,
-                                foregroundColor: AppColors.surface,
-                                shape: const StadiumBorder(),
-                              ),
-                            ),
+                            child:
+                                BlocBuilder<
+                                  ProductDetailsCubit,
+                                  ProductDetailsState
+                                >(
+                                  bloc: BlocProvider.of<ProductDetailsCubit>(
+                                    context,
+                                  ),
+                                  buildWhen: ((previous, current) =>
+                                      current is ProductAddedToCart ||
+                                      current is ProductAddingToCart),
+                                  builder: (context, state) {
+                                    if (state is ProductAddingToCart) {
+                                      return ElevatedButton(
+                                        onPressed: null,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppColors.primary,
+                                          foregroundColor: AppColors.surface,
+                                          shape: const StadiumBorder(),
+                                        ),
+                                        child:
+                                            CircularProgressIndicator.adaptive(),
+                                      );
+                                    } else if (state is ProductAddedToCart) {
+                                      return ElevatedButton(
+                                        onPressed: null,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppColors.primary,
+                                          foregroundColor: AppColors.surface,
+                                          shape: const StadiumBorder(),
+                                        ),
+                                        child: const Text("Added To Cart"),
+                                      );
+                                    }
+
+                                    return ElevatedButton.icon(
+                                      onPressed: () =>BlocProvider.of<ProductDetailsCubit>(context).addToCart(product.id),
+                                      icon: Icon(Icons.shopping_bag_outlined),
+                                      label: Text("Add Cart"),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.primary,
+                                        foregroundColor: AppColors.surface,
+                                        shape: const StadiumBorder(),
+                                      ),
+                                    );
+                                  },
+                                ),
                           ),
                         ],
                       ),

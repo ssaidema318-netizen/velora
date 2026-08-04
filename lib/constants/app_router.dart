@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_routes.dart';
 import 'package:velora/features/bottom_navbar/custom_bottom_navbar.dart';
-import 'package:velora/features/home/product_details/cubit/prodct_details_cubit.dart';
+import 'package:velora/features/home/product_details/cubit/product_details_cubit.dart';
 import 'package:velora/features/home/product_details/product_details_page.dart';
 
 class AppRouter {
@@ -15,7 +15,7 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) {
-              final cubit = ProdctDetailsCubit();
+              final cubit = ProductDetailsCubit();
               cubit.getProductDetails(productId);
               return cubit;
             },

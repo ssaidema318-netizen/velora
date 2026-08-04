@@ -17,8 +17,9 @@ class ProductItemModel {
 
   final double? oldPrice;
   final int? discount;
+  final int quantity;
 
-  const ProductItemModel({
+  ProductItemModel({
     required this.id,
     required this.name,
     required this.price,
@@ -27,20 +28,56 @@ class ProductItemModel {
     required this.reviewCount,
     required this.description,
     required this.categoryName,
-
     this.isFeatured = false,
     this.isFlashSale = false,
     this.isRecommended = false,
-
     this.inStock = true,
     this.stock = 0,
-
     this.oldPrice,
     this.discount,
+    this.quantity = 1,
   });
+
+  ProductItemModel copyWith({
+    String? id,
+    String? name,
+    double? price,
+    String? imageUrl,
+    double? rating,
+    int? reviewCount,
+    String? description,
+    String? categoryName,
+    bool? isFeatured,
+    bool? isFlashSale,
+    bool? isRecommended,
+    bool? inStock,
+    int? stock,
+    double? oldPrice,
+    int? discount,
+    int? quantity,
+  }) {
+    return ProductItemModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      price: price ?? this.price,
+      imageUrl: imageUrl ?? this.imageUrl,
+      rating: rating ?? this.rating,
+      reviewCount: reviewCount ?? this.reviewCount,
+      description: description ?? this.description,
+      categoryName: categoryName ?? this.categoryName,
+      isFeatured: isFeatured ?? this.isFeatured,
+      isFlashSale: isFlashSale ?? this.isFlashSale,
+      isRecommended: isRecommended ?? this.isRecommended,
+      inStock: inStock ?? this.inStock,
+      stock: stock ?? this.stock,
+      oldPrice: oldPrice ?? this.oldPrice,
+      discount: discount ?? this.discount,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }
 
-const List<ProductItemModel> dummyProducts = [
+List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '1',
     name: 'Apple Watch Ultra 2',
@@ -50,7 +87,8 @@ const List<ProductItemModel> dummyProducts = [
     imageUrl: 'assets/images/apple_watch_ultra 2.webp',
     rating: 4.9,
     reviewCount: 1824,
-    description: 'Premium smartwatch with advanced health tracking, GPS, and long battery life.',
+    description:
+        'Premium smartwatch with advanced health tracking, GPS, and long battery life.',
     categoryName: 'Wearables',
     isFeatured: true,
     isRecommended: true,
@@ -65,7 +103,8 @@ const List<ProductItemModel> dummyProducts = [
     imageUrl: 'assets/images/galaxy_watch_ultra.jfif',
     rating: 4.8,
     reviewCount: 943,
-    description: 'Powerful smartwatch with AI features and premium titanium design.',
+    description:
+        'Powerful smartwatch with AI features and premium titanium design.',
     categoryName: 'Wearables',
     isRecommended: true,
     inStock: true,
@@ -81,7 +120,8 @@ const List<ProductItemModel> dummyProducts = [
     imageUrl: 'assets/images/sony_wH-1000XM6.jfif',
     rating: 4.9,
     reviewCount: 2310,
-    description: 'Industry-leading noise cancellation with exceptional sound quality.',
+    description:
+        'Industry-leading noise cancellation with exceptional sound quality.',
     categoryName: 'Audio',
     isFeatured: true,
     inStock: true,
@@ -122,7 +162,8 @@ const List<ProductItemModel> dummyProducts = [
     imageUrl: 'assets/images/iPhone_17_pro.jfif',
     rating: 5.0,
     reviewCount: 310,
-    description: 'Apple flagship with the latest A-series chip and pro camera system.',
+    description:
+        'Apple flagship with the latest A-series chip and pro camera system.',
     categoryName: 'Phones',
     isFeatured: true,
     isRecommended: true,
@@ -207,7 +248,7 @@ const List<ProductItemModel> dummyProducts = [
     imageUrl: 'assets/images/keychron_k8_pro.jfif',
     rating: 4.8,
     reviewCount: 902,
-    oldPrice:59,
+    oldPrice: 59,
     discount: 10,
     description: 'Wireless mechanical keyboard with hot-swappable switches.',
     categoryName: 'Accessories',
