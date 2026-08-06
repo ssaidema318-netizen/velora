@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_router.dart';
 import 'package:velora/features/bottom_navbar/custom_bottom_navbar.dart';
+import 'package:velora/features/cart/cubit/cart_cubit.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [BlocProvider(create: (_) => CartCubit()..getCartItems())],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

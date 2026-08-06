@@ -16,9 +16,7 @@ class CustomBageNavbar extends StatefulWidget {
 class _CustomBageNavbarState extends State<CustomBageNavbar> {
   @override
   Widget build(BuildContext context) {
-    
-    return 
-    PersistentTabView(
+    return PersistentTabView(
       tabs: [
         PersistentTabConfig(
           screen: const HomePage(),
@@ -64,12 +62,11 @@ class _CustomBageNavbarState extends State<CustomBageNavbar> {
           item: ItemConfig(
             icon: const Icon(Icons.person_outline_rounded),
             title: "Profile",
-            activeForegroundColor:Colors.blue,
+            activeForegroundColor: Colors.blue,
             inactiveForegroundColor: Colors.black54,
           ),
         ),
       ],
-      
 
       navBarBuilder: (navBarConfig) =>
           Style2BottomNavBar(navBarConfig: navBarConfig),

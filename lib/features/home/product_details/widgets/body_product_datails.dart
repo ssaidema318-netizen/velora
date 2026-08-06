@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_spacing.dart';
-import 'package:velora/features/home/product_details/cubit/product_details_cubit.dart';
+import 'package:velora/features/cart/cubit/cart_cubit.dart';
+import 'package:velora/features/home/product_details/cubit/product_details_cubit.dart' hide QuantityCounterLoaded;
 import 'package:velora/features/home/product_details/widgets/information_product.dart';
 import 'package:velora/models/product_item_model.dart';
 
@@ -124,7 +125,7 @@ class BodyProductDatails extends StatelessWidget {
                                   builder: (context, state) {
                                     int quantity = 1;
                                     if (state is QuantityCounterLoaded) {
-                                      quantity = state.value;
+                                      quantity = state.quantity;
                                     } else if (state is ProdctDetailsLoaded) {
                                       quantity = state.productItem.quantity;
                                     }
@@ -191,7 +192,14 @@ class BodyProductDatails extends StatelessWidget {
                                     }
 
                                     return ElevatedButton.icon(
-                                      onPressed: () =>BlocProvider.of<ProductDetailsCubit>(context).addToCart(product.id),
+                                      onPressed: () {
+                                        BlocProvider.of<ProductDetailsCubit>(
+                                          context,
+                                        ).addToCart(product.id);
+                                        
+
+                                        context.read<CartCubit>().refreshCart();
+                                      },
                                       icon: Icon(Icons.shopping_bag_outlined),
                                       label: Text("Add Cart"),
                                       style: ElevatedButton.styleFrom(
