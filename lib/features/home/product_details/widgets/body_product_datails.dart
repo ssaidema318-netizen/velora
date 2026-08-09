@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_spacing.dart';
 import 'package:velora/features/cart/cubit/cart_cubit.dart';
-import 'package:velora/features/home/product_details/cubit/product_details_cubit.dart' hide QuantityCounterLoaded;
+import 'package:velora/features/home/product_details/cubit/product_details_cubit.dart';
 import 'package:velora/features/home/product_details/widgets/information_product.dart';
 import 'package:velora/models/product_item_model.dart';
 
@@ -110,7 +110,7 @@ class BodyProductDatails extends StatelessWidget {
                             child: Column(
                               // crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text("Toal Price"),
+                                Text("Toal Price",style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),),
                                 SizedBox(height: AppSpacing.m),
                                 BlocBuilder<
                                   ProductDetailsCubit,
@@ -125,7 +125,7 @@ class BodyProductDatails extends StatelessWidget {
                                   builder: (context, state) {
                                     int quantity = 1;
                                     if (state is QuantityCounterLoaded) {
-                                      quantity = state.quantity;
+                                      quantity = state.value;
                                     } else if (state is ProdctDetailsLoaded) {
                                       quantity = state.productItem.quantity;
                                     }
@@ -145,7 +145,7 @@ class BodyProductDatails extends StatelessWidget {
                                             text: "${quantity * product.price}",
                                             style: Theme.of(
                                               context,
-                                            ).textTheme.titleMedium,
+                                            ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
                                           ),
                                         ],
                                       ),

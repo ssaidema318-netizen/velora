@@ -21,7 +21,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () => Navigator.pop(context),
               color: AppColors.primary,
             ),
-            Text("Velora", style: Theme.of(context).textTheme.headlineMedium),
             IconBotton(
               icon: Icons.favorite_border_sharp,
               onPressed: () {},

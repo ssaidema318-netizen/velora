@@ -7,22 +7,21 @@ sealed class CartState {
 final class CartInitial extends CartState {}
 final class CartLoading extends CartState {}
 final class CartLoaded extends CartState {
+  final int subTotal;
   final List<AddToCartModel>cartItem;
 
-  const CartLoaded({required this.cartItem});
+  const CartLoaded({required this.cartItem, required this.subTotal});
 }
 final class CartError extends CartState {
   final String message;
 
   const CartError({required this.message});
 }
-void incrementCounter(String productId) {
-    quantity++;
-    emit(QuantityCounterLoaded(value: quantity));
-  }
+final class CartQuantityChanged extends CartState {
+   final AddToCartModel updatedItem;
+   final int subTotal;
 
-  void decrementCounter(String productId) {
-    quantity = quantity > 1 ? quantity - 1 : 1;
-
-    emit(QuantityCounterLoaded(value: quantity));
-  }
+  CartQuantityChanged({
+    required this.updatedItem, required this.subTotal});
+}
+final class CartMaxQuantityReached extends CartState{}

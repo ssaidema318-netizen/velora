@@ -15,7 +15,7 @@ class ProductCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(bottom: 20),
-      height: size.height * 0.20,
+      height: size.height * 0.18,
       decoration: BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.circular(30),
@@ -43,9 +43,9 @@ class ProductCard extends StatelessWidget {
                 children: [
                   Text(
                     cartItem.name,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   SizedBox(height: AppSpacing.m),
                   Text(
@@ -53,13 +53,29 @@ class ProductCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   SizedBox(height: AppSpacing.l),
-                  Text(
-                    "\$${cartItem.price}",
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+                  BlocBuilder<CartCubit, CartState>(
+                    bloc: BlocProvider.of<CartCubit>(context),
+                    buildWhen: (previous, current) =>
+                        current is CartQuantityChanged &&
+                        current.updatedItem.productId == cartItem.productId,
+                    builder: (context, state) {
+                      int totalPrice = cartItem.totalPrice;
+
+                      if (state is CartQuantityChanged &&
+                          state.updatedItem.productId == cartItem.productId) {
+                        totalPrice = state.updatedItem.totalPrice;
+                      }
+
+                      return Text(
+                        "\$${totalPrice}",
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
                   ),
-                  SizedBox(height: AppSpacing.xxl),
+                  SizedBox(height: AppSpacing.xl),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -67,19 +83,36 @@ class ProductCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           IconBotton(
-                            onPressed: () {},
+                            onPressed: () => BlocProvider.of<CartCubit>(
+                              context,
+                            ).decrementCounter(cartItem),
                             icon: Icons.remove,
                             color: AppColors.primary,
                           ),
                           SizedBox(width: AppSpacing.m),
-                          Text(
-                            cartItem.quantity.toString(),
-                            style: Theme.of(context).textTheme.labelLarge!
-                                .copyWith(fontWeight: FontWeight.bold),
+                          BlocBuilder<CartCubit, CartState>(
+                            buildWhen: (previous, current) =>
+                                current is CartQuantityChanged ||
+                                current is CartLoaded,
+                            builder: (context, state) {
+                              int quantity = cartItem.quantity;
+
+                              if (state is CartQuantityChanged &&
+                                  state.updatedItem.productId == cartItem.productId) {
+                                quantity = state.updatedItem.quantity;
+                              }
+
+                              return Text(
+                                quantity.toString(),
+                                style: Theme.of(context).textTheme.labelLarge,
+                              );
+                            },
                           ),
                           SizedBox(width: AppSpacing.m),
                           IconBotton(
-                            onPressed: () {},
+                            onPressed: () => BlocProvider.of<CartCubit>(
+                              context,
+                            ).incrementCounter(cartItem),
                             icon: Icons.add,
                             color: AppColors.primary,
                           ),
@@ -88,7 +121,9 @@ class ProductCard extends StatelessWidget {
                       Spacer(),
                       IconBotton(
                         onPressed: () {
-                          BlocProvider.of<CartCubit>(context).removeItem(cartItem);
+                          BlocProvider.of<CartCubit>(
+                            context,
+                          ).removeItem(cartItem);
                         },
                         icon: Icons.delete,
                         color: AppColors.primary,

@@ -69,7 +69,7 @@ class _CustomBageNavbarState extends State<CustomBageNavbar> {
       ],
 
       navBarBuilder: (navBarConfig) =>
-          Style2BottomNavBar(navBarConfig: navBarConfig),
+          Style16BottomNavBar(navBarConfig: navBarConfig),
     );
   }
 }

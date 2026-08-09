@@ -38,11 +38,22 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
       productId: productId,
       quantity: quantity,
       imageUrl: product.imageUrl,
-      price: (product.price * quantity).toInt(),
+      price: (product.price).toInt(),
       rating: product.rating,
       reviewCount: product.reviewCount,
+      stock: product.stock
     );
-    dummyCart.add(cartItem);
+    final index = dummyCart.indexWhere((test)=>test.productId==product.id);
+    if(index==-1){
+      dummyCart.add(cartItem);
+    }
+    else{
+      final oldItem = dummyCart[index];
+
+  dummyCart[index] = oldItem.copyWith(
+    quantity: oldItem.quantity + quantity,);
+    }
+    
     Future.delayed(const Duration(seconds: 1), () {
       emit(ProductAddedToCart(productId: productId));
     });

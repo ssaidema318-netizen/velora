@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_spacing.dart';
 import 'package:velora/features/cart/cubit/cart_cubit.dart';
+import 'package:velora/features/cart/widgets/check_out.dart';
 import 'package:velora/features/cart/widgets/product_card.dart';
 
 class CartPage extends StatelessWidget {
@@ -25,16 +26,29 @@ class CartPage extends StatelessWidget {
             }
             return Padding(
               padding: const EdgeInsets.all(AppSpacing.l),
-              child: Column(
-                children: [
-                  ListView.separated(
-                    itemCount: state.cartItem.length,
-                    itemBuilder: (context, index) => ProductCard(cartItem: state.cartItem[index]),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    separatorBuilder: (context, index) => const Divider(),
-                  ),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ListView.separated(
+                      itemCount: state.cartItem.length,
+                      itemBuilder: (context, index) =>
+                          ProductCard(cartItem: state.cartItem[index]),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      separatorBuilder: (context, index) => const Divider(),
+                    ),
+                    BlocBuilder<CartCubit, CartState>(
+                      buildWhen: (previous, current) => current is CartQuantityChanged || current is CartLoaded,
+                      builder: (context, state) {
+                        int subTotal = 0;
+                        if (state is CartLoaded){subTotal=state.subTotal;}
+                        else if(state is CartQuantityChanged){subTotal= state.subTotal;}
+                        return CheckOut(subTotal: subTotal);
+                        
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           } else if (state is CartError) {
