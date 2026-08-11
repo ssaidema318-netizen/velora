@@ -16,6 +16,7 @@ dependencies:
   persistent_bottom_nav_bar: any
   carousel_slider: ^5.1.2
   hugeicons: ^1.0.0
+  url_launcher: any
 
 dev_dependencies:
   flutter_test:
