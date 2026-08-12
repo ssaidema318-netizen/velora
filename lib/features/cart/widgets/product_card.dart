@@ -67,7 +67,7 @@ class ProductCard extends StatelessWidget {
                       }
 
                       return Text(
-                        "\$${totalPrice}",
+                        "\$$totalPrice",
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),

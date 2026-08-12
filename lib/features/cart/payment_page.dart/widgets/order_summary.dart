@@ -86,7 +86,7 @@ class OrderSummary extends StatelessWidget {
                 ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
               ),
               trailing: Text(
-                "\$${subTotal}",
+                "\$$subTotal",
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
