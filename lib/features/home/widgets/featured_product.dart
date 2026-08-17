@@ -25,7 +25,7 @@ class FeaturedProduct extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.l),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.l),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -40,7 +40,7 @@ class FeaturedProduct extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  right: 5,
+                  right: 0,
                   top: 2,
                   child: IconBotton(
                     icon: Icons.favorite_border,

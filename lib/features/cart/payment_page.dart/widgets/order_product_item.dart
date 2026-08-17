@@ -20,7 +20,7 @@ class OrderProductItem extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: 130,
+              // height: 130,
               width: double.infinity,
               child: Image.asset(orderProduct.imageUrl,fit: BoxFit.contain,),
             ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_routes.dart';
 import 'package:velora/features/bottom_navbar/custom_bottom_navbar.dart';
+import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/page/choose_address_page.dart';
+import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/page/cubit/add_new_card_cubit.dart';
 import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/page/new_payment_card_page.dart';
 import 'package:velora/features/cart/payment_page.dart/page/payment_page.dart';
 import 'package:velora/features/home/product_details/cubit/product_details_cubit.dart';
@@ -27,7 +29,16 @@ class AppRouter {
       case AppRoutes.paymentPageRoute:
         return MaterialPageRoute(builder: (_)=>PaymentPage());
       case AppRoutes.newPaymentCardPageRoute:
-        return MaterialPageRoute(builder: (_)=>NewPaymentCardPage());
+        return MaterialPageRoute(builder: (_)=>BlocProvider(
+          create: (context) =>AddNewCardCubit(),
+          child:NewPaymentCardPage(),
+        )
+        
+        );
+      case AppRoutes.chooseAddressPageRoute:
+        return MaterialPageRoute(builder: (_)=>ChooseAddressPage()
+        
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

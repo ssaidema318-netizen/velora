@@ -16,7 +16,7 @@ class HomeCarousel extends StatelessWidget {
       },
       
       options: CarouselOptions(
-        height: 400,
+        // height: 400,
         autoPlay: true,
       ),
     );

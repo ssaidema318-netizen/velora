@@ -33,7 +33,7 @@ class OrderSummary extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(AppSpacing.m),
         child: Column(
           children: [
             ExpansionTile(

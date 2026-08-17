@@ -15,7 +15,7 @@ class ProductCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(bottom: 20),
-      height: size.height * 0.18,
+      // height: size.height * 0.18,
       decoration: BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.circular(30),
@@ -33,7 +33,7 @@ class ProductCard extends StatelessWidget {
                 cartItem.imageUrl,
                 width: size.width * 0.25,
                 height: size.height * 0.18,
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               ),
             ),
             SizedBox(width: AppSpacing.sm),

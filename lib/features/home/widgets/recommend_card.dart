@@ -31,7 +31,7 @@ class RecommendCard extends StatelessWidget {
           Stack(
             children: [
               AspectRatio(
-                aspectRatio: 0.85,
+                aspectRatio: 0.95,
                 child: Padding(
                   padding: const EdgeInsets.all(AppSpacing.md),
                   child: Image.asset(product.imageUrl, fit: BoxFit.cover),

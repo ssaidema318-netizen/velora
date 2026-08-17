@@ -9,8 +9,10 @@ final class PaymentLoaded extends PaymentState {
   final int totalItems;
   final int subTotale;
   final List<AddToCartModel> paymentItem;
+  final PaymentModel? chosenPayment;
+  final AddressModel? chosenAddress;
 
-  PaymentLoaded({required this.totalItems, required this.subTotale,  required this.paymentItem});
+  PaymentLoaded({required this.totalItems, required this.subTotale,  required this.paymentItem, this.chosenPayment, this.chosenAddress});
 }
 final class PaymentError extends PaymentState {
   final String message;

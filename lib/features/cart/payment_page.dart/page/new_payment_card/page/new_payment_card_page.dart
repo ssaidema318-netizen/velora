@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_spacing.dart';
+import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/page/cubit/add_new_card_cubit.dart';
+
 import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/widgets/app_text_form_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/widgets/payment_card_bannar.dart';
@@ -49,8 +52,6 @@ class _NewPaymentCardPageState extends State<NewPaymentCardPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-    
-
                 Text(
                   "Add Your card",
                   style: Theme.of(
@@ -90,8 +91,9 @@ class _NewPaymentCardPageState extends State<NewPaymentCardPage> {
                         hintText: 'Enter cardholder name',
                         textInputAction: TextInputAction.next,
                         obscureText: false,
-                        
-                        validator: 'Cardholder name is required', suffixIcon: Icons.person,
+
+                        validator: 'Cardholder name is required',
+                        suffixIcon: Icons.person,
                       ),
                       const SizedBox(height: AppSpacing.md),
                       AppTextFormField(
@@ -102,7 +104,8 @@ class _NewPaymentCardPageState extends State<NewPaymentCardPage> {
                         obscureText: false,
                         validator: 'Cardholder number is required',
                         keyboardType: TextInputType.number,
-                        inputFormatters: [cardNumberFormatter], suffixIcon: Icons.credit_card,
+                        inputFormatters: [cardNumberFormatter],
+                        suffixIcon: Icons.credit_card,
                       ),
                       const SizedBox(height: AppSpacing.md),
                       Row(
@@ -117,7 +120,8 @@ class _NewPaymentCardPageState extends State<NewPaymentCardPage> {
                               obscureText: false,
                               validator: "Enter a valid expiry date",
                               keyboardType: TextInputType.number,
-                              inputFormatters: [expiryDateFormatter], suffixIcon: Icons.date_range,
+                              inputFormatters: [expiryDateFormatter],
+                              suffixIcon: Icons.date_range,
                             ),
                           ),
 
@@ -135,7 +139,8 @@ class _NewPaymentCardPageState extends State<NewPaymentCardPage> {
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
                                 LengthLimitingTextInputFormatter(3),
-                              ], suffixIcon: Icons.confirmation_num_rounded,
+                              ],
+                              suffixIcon: Icons.confirmation_num_rounded,
                             ),
                           ),
                         ],
@@ -153,21 +158,57 @@ class _NewPaymentCardPageState extends State<NewPaymentCardPage> {
                         height: 60,
                         width: double.infinity,
 
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {}
+                        child: BlocConsumer<AddNewCardCubit, AddNewCardState>(
+                          buildWhen: (previous, current) =>
+                              current is AddNewCardLoading ||
+                              current is AddNewCardSuccess,
+                          listenWhen: (previous, current) =>
+                              current is AddNewCardSuccess ||
+                              current is AddNewCardFailure,
+                          bloc: BlocProvider.of<AddNewCardCubit>(context),
+                          listener: (context, state) {
+                            if (state is AddNewCardSuccess) {
+                              Navigator.pop(context);
+                            } else if (state is AddNewCardFailure) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(state.message)),
+                              );
+                            }
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                          ),
-                          child: Text(
-                            "Add Card",
-                            style: Theme.of(context).textTheme.labelLarge!
-                                .copyWith(
-                                  color: AppColors.surface,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
+                          builder: (context, state) {
+                            if (state is AddNewCardLoading) {
+                              return ElevatedButton(
+                                onPressed: null,
+
+                                child: CircularProgressIndicator.adaptive(),
+                              );
+                            }
+                            return ElevatedButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  BlocProvider.of<AddNewCardCubit>(
+                                    context,
+                                  ).addNewCard(
+                                    cardHolderController.text,
+                                    cardNumberController.text,
+                                    expiryDateController.text,
+                                    cvvController.text,
+                                  );
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                              ),
+                              child: Text(
+                                "Add Card",
+                                style: Theme.of(context).textTheme.labelLarge!
+                                    .copyWith(
+                                      color: AppColors.surface,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],

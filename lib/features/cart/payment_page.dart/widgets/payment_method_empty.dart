@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_routes.dart';
 import 'package:velora/constants/app_spacing.dart';
+import 'package:velora/features/cart/payment_page.dart/cubit/payment_cubit.dart';
 
-class PaymentMethod extends StatelessWidget {
-  const PaymentMethod({super.key});
+class PaymentMethodEmpty extends StatelessWidget {
+  const PaymentMethodEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.20,
+      // height: size.height * 0.20,
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.background,
@@ -48,7 +50,7 @@ class PaymentMethod extends StatelessWidget {
               width: 300,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(AppRoutes.newPaymentCardPageRoute);
+                  Navigator.of(context).pushNamed(AppRoutes.newPaymentCardPageRoute).then((_)=>BlocProvider.of<PaymentCubit>(context).getPaymentItem());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
