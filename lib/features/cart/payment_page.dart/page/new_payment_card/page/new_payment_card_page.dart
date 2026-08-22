@@ -4,10 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_spacing.dart';
 import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/page/cubit/add_new_card_cubit.dart';
-
-import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/widgets/app_text_form_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/widgets/payment_card_bannar.dart';
+import 'package:velora/widgets/app_text_form_field.dart';
 
 class NewPaymentCardPage extends StatefulWidget {
   const NewPaymentCardPage({super.key});

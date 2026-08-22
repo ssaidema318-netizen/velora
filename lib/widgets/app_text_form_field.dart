@@ -12,7 +12,7 @@ class AppTextFormField extends StatelessWidget {
     this.keyboardType,
     required this.textInputAction,
     required this.obscureText,
-    this.inputFormatters, required this.validator, required this.suffixIcon,
+    this.inputFormatters, required this.validator,  this.suffixIcon, this.prefixIcon, this.prefixText,
   });
   final String label;
   final String hintText;
@@ -22,7 +22,9 @@ class AppTextFormField extends StatelessWidget {
   final bool obscureText;
   final List<TextInputFormatter>? inputFormatters;
   final String validator;
-  final IconData suffixIcon;
+  final IconData? suffixIcon;
+  final IconData? prefixIcon;
+  final String? prefixText;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +53,9 @@ class AppTextFormField extends StatelessWidget {
             controller: controller,
             decoration: InputDecoration(
               suffixIcon:Icon(suffixIcon,color:AppColors.textHint ,) ,
+              prefixIcon:prefixIcon!=null?Icon(prefixIcon,color:AppColors.textHint ,) :null,
+              prefixText: prefixText,
+              prefixStyle: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
               hintText: hintText,
               filled: true,
               fillColor: AppColors.background,
@@ -76,7 +81,7 @@ class AppTextFormField extends StatelessWidget {
               ),
               contentPadding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.l,
-            vertical: AppSpacing.l,
+            vertical: AppSpacing.lg,
           ),
           
             ),

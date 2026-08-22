@@ -8,10 +8,16 @@ import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/pag
 import 'package:velora/features/cart/payment_page.dart/page/payment_page.dart';
 import 'package:velora/features/home/product_details/cubit/product_details_cubit.dart';
 import 'package:velora/features/home/product_details/product_details_page.dart';
+import 'package:velora/features/login/page/login.dart';
+import 'package:velora/features/login/page/new_account.dart';
 
 class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+       case AppRoutes.logInRoute:
+        return MaterialPageRoute(builder: (_) => const Login());
+       case AppRoutes.createAccountRoute:
+        return MaterialPageRoute(builder: (_) => const NewAccount());
       case AppRoutes.customBottomRoute:
         return MaterialPageRoute(builder: (_) => const CustomBageNavbar());
       case AppRoutes.producDetailsRoute:

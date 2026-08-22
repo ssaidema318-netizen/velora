@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "378440085296",
+    "project_id": "e-commerce-velora",
+    "storage_bucket": "e-commerce-velora.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378440085296:android:1f3eab800d2edcab2a62f5",
+        "android_client_info": {
+          "package_name": "com.example.velora"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhaNQjgI2qC6IXG5CSx6SsX-s6huEw1Ds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
