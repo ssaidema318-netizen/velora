@@ -43,6 +43,8 @@ class ProductCard extends StatelessWidget {
                 children: [
                   Text(
                     cartItem.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -90,7 +92,16 @@ class ProductCard extends StatelessWidget {
                             color: AppColors.primary,
                           ),
                           SizedBox(width: AppSpacing.m),
-                          BlocBuilder<CartCubit, CartState>(
+                          BlocConsumer<CartCubit, CartState>(
+                            listenWhen: (previous, current) =>
+                                current is CartMaxQuantityReached,
+                            listener: (context, state) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("No more stock available"),
+                                ),
+                              );
+                            },
                             buildWhen: (previous, current) =>
                                 current is CartQuantityChanged ||
                                 current is CartLoaded,

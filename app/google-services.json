@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "378440085296",
+    "project_id": "e-commerce-velora",
+    "storage_bucket": "e-commerce-velora.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378440085296:android:1f3eab800d2edcab2a62f5",
+        "android_client_info": {
+          "package_name": "com.said.velora"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "378440085296-og6f3uof4g9jvuro60dnlstsa6n4u0qn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.said.velora",
+            "certificate_hash": "5044c7aa6c65aea3f0d4700df82be63a51fc5b71"
+          }
+        },
+        {
+          "client_id": "378440085296-qlnjvmiatk592q59t4o2avnvcfp95v5n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhaNQjgI2qC6IXG5CSx6SsX-s6huEw1Ds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "378440085296-qlnjvmiatk592q59t4o2avnvcfp95v5n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "378440085296-uug9vcpq39nlp4ocfdatoll9d4178umu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.said.velora"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

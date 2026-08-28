@@ -14,6 +14,11 @@ final class QuantityCounterLoaded extends ProductDetailsState {
 
   QuantityCounterLoaded({required this.value});
 }
+final class QuantityMaxReached extends ProductDetailsState {
+  final int value;
+
+  QuantityMaxReached({required this.value});
+}
 
 final class ProdctDetailsError extends ProductDetailsState {
   final String message;
@@ -28,6 +33,10 @@ final class ProductAddedToCart extends ProductDetailsState{
 
 }
 final class ProductAddingToCart extends ProductDetailsState{
- 
+}
 
+final class ProductAddToCartError extends ProductDetailsState{
+  final String message;
+
+  ProductAddToCartError({required this.message});
 }

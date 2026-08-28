@@ -1,23 +1,31 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/models/add_to_cart_model.dart';
 import 'package:velora/models/product_item_model.dart';
+import 'package:velora/services/auth_services.dart';
+import 'package:velora/services/product_details_services.dart';
 
 part 'product_details_state.dart';
 
 class ProductDetailsCubit extends Cubit<ProductDetailsState> {
+  final productDetailsServices = ProductDetailsServicesImpl();
+  final authservices = AuthServicesImpl();
+  ProductItemModel? currentProduct;
   int quantity = 1;
   ProductDetailsCubit() : super(ProdctDetailsInitial());
-  void getProductDetails(String id) {
-    // emit(ProdctDetailsLoading());
-    Future.delayed(Duration(seconds: 0), () {
-      final selectedProduct = dummyProducts.firstWhere(
-        (product) => product.id == id,
-      );
-      emit(ProdctDetailsLoaded(productItem: selectedProduct));
-    });
+  void getProductDetails(String id) async{
+    emit(ProdctDetailsLoading());
+    try{
+    final slectedItem = await productDetailsServices.featchProdctDetails(id);
+    emit(ProdctDetailsLoaded(productItem: slectedItem));
+    }catch (e){emit(ProdctDetailsError(message: e.toString()));}
   }
 
-  void incrementCounter(String productId) {
+  void incrementCounter(String productId) async{
+    final product =  await productDetailsServices.featchProdctDetails(productId);
+    if (quantity >= product.stock) {
+      emit(QuantityMaxReached(value: quantity));
+      return;
+    }
     quantity++;
     emit(QuantityCounterLoaded(value: quantity));
   }
@@ -28,12 +36,11 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
     emit(QuantityCounterLoaded(value: quantity));
   }
 
-  void addToCart(String productId) {
-    final product = dummyProducts.firstWhere(
-      (element) => element.id == productId,
-    );
+  void addToCart(String productId) async{
+    final product = await productDetailsServices.featchProdctDetails(productId);
     emit(ProductAddingToCart());
-    final cartItem = AddToCartModel(
+    try{
+      final cartItem = AddToCartModel(
       name: product.name,
       productId: productId,
       quantity: quantity,
@@ -43,19 +50,10 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
       reviewCount: product.reviewCount,
       stock: product.stock
     );
-    final index = dummyCart.indexWhere((test)=>test.productId==product.id);
-    if(index==-1){
-      dummyCart.add(cartItem);
-    }
-    else{
-      final oldItem = dummyCart[index];
-
-  dummyCart[index] = oldItem.copyWith(
-    quantity: oldItem.quantity + quantity,);
-    }
+    await productDetailsServices.addtoCard(cartItem, authservices.currentUser()!.uid);
+    emit(ProductAddedToCart(productId: productId));
+    }catch (e){emit(ProductAddToCartError(message: e.toString()));}
     
-    Future.delayed(const Duration(seconds: 1), () {
-      emit(ProductAddedToCart(productId: productId));
-    });
+    
   }
 }

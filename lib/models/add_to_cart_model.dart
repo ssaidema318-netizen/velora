@@ -1,4 +1,6 @@
-class AddToCartModel{
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
+class AddToCartModel {
   final String name;
   final String productId;
   final String imageUrl;
@@ -34,6 +36,34 @@ class AddToCartModel{
   }
   
  int get totalPrice => quantity * price;
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'name': name,
+      'productId': productId,
+      'imageUrl': imageUrl,
+      'price': price,
+      'quantity': quantity,
+      'rating': rating,
+      'reviewCount': reviewCount,
+      'stock': stock,
+    };
+  }
+
+  factory AddToCartModel.fromMap(Map<String, dynamic> map) {
+    return AddToCartModel(
+      name: map['name'] as String,
+      productId: map['productId'] as String,
+      imageUrl: map['imageUrl'] as String,
+      price: map['price'] as int,
+      quantity: map['quantity'] as int,
+      rating: map['rating'] as double,
+      reviewCount: map['reviewCount'] as int,
+      stock: map['stock'] as int,
+    );
+  }
+
+
 }
 
 List<AddToCartModel> dummyCart =[];

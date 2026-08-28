@@ -5,11 +5,13 @@ import 'package:velora/features/home/widgets/section_home.dart';
 import 'package:velora/models/product_item_model.dart';
 
 class RecommendSection extends StatelessWidget {
-  const RecommendSection({super.key});
+  final List<ProductItemModel> productItem;
+
+  const RecommendSection({super.key, required this.productItem});
 
   @override
   Widget build(BuildContext context) {
-    final recommendItems = dummyProducts.where((e) => e.isRecommended).toList();
+    final recommendItems = productItem.where((e) => e.isRecommended).toList();
     return Column(
       children: [
         SectionHome(title: "Recommend For You"),

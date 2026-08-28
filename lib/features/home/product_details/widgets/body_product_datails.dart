@@ -47,13 +47,29 @@ class BodyProductDatails extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
+                  BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
                     bloc: BlocProvider.of<ProductDetailsCubit>(context),
+                    listenWhen: (previous, current) =>
+                        current is QuantityMaxReached,
+                    listener: (context, state) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("No more stock available"),
+                        ),
+                      );
+                    },
                     buildWhen: ((previous, current) =>
                         current is QuantityCounterLoaded ||
+                        current is QuantityMaxReached ||
                         current is ProdctDetailsLoaded),
                     builder: (context, state) {
                       if (state is QuantityCounterLoaded) {
+                        return InformationProduct(
+                          product: product,
+                          value: state.value,
+                          cubit: BlocProvider.of<ProductDetailsCubit>(context),
+                        );
+                      } else if (state is QuantityMaxReached) {
                         return InformationProduct(
                           product: product,
                           value: state.value,
@@ -121,10 +137,13 @@ class BodyProductDatails extends StatelessWidget {
                                   ),
                                   buildWhen: ((previous, current) =>
                                       current is QuantityCounterLoaded ||
+                                      current is QuantityMaxReached ||
                                       current is ProdctDetailsLoaded),
                                   builder: (context, state) {
                                     int quantity = 1;
                                     if (state is QuantityCounterLoaded) {
+                                      quantity = state.value;
+                                    } else if (state is QuantityMaxReached) {
                                       quantity = state.value;
                                     } else if (state is ProdctDetailsLoaded) {
                                       quantity = state.productItem.quantity;
@@ -142,7 +161,8 @@ class BodyProductDatails extends StatelessWidget {
                                                 ),
                                           ),
                                           TextSpan(
-                                            text: "${quantity * product.price}",
+                                            text: (quantity * product.price)
+                                                .toStringAsFixed(0),
                                             style: Theme.of(
                                               context,
                                             ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),

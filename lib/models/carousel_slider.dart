@@ -1,10 +1,28 @@
-class CarouselSlider {
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
+class CarouselSliders {
   final String id;
   final String imageUrl;
 
-  CarouselSlider({required this.id, required this.imageUrl});
+  CarouselSliders({required this.id, required this.imageUrl});
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'imageUrl': imageUrl,
+    };
+  }
+
+  factory CarouselSliders.fromMap(Map<String, dynamic> map) {
+    return CarouselSliders(
+      id: map['id'] as String,
+      imageUrl: map['imageUrl'] as String,
+    );
+  }
+
+
 }
-List<CarouselSlider> dummySliders=[
-CarouselSlider(id: "1", imageUrl:"assets/images/carousel_slider_1.png" ),
-CarouselSlider(id: "1", imageUrl:"assets/images/carousel_slider_2.png" ),
-CarouselSlider(id: "1", imageUrl:"assets/images/carousel_slider_3.png" ),];
+List<CarouselSliders> dummySliders=[
+CarouselSliders(id: "1", imageUrl:"assets/images/carousel_slider_1.png" ),
+CarouselSliders(id: "2", imageUrl:"assets/images/carousel_slider_2.png" ),
+CarouselSliders(id: "3", imageUrl:"assets/images/carousel_slider_3.png" ),];

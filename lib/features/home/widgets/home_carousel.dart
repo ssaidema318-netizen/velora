@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:velora/models/carousel_slider.dart' hide CarouselSlider;
+import 'package:velora/models/carousel_slider.dart' ;
 
 class HomeCarousel extends StatelessWidget {
-  const HomeCarousel({super.key});
+  final List<CarouselSliders> sliders;
+  const HomeCarousel({super.key, required this.sliders});
 
   @override
   Widget build(BuildContext context) {

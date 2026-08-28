@@ -1,7 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 class ProductItemModel {
   final String id;
   final String name;
-  final double price;
+  final int price;
   final String imageUrl;
   final double rating;
   final int reviewCount;
@@ -41,7 +43,7 @@ class ProductItemModel {
   ProductItemModel copyWith({
     String? id,
     String? name,
-    double? price,
+    int? price,
     String? imageUrl,
     double? rating,
     int? reviewCount,
@@ -75,13 +77,82 @@ class ProductItemModel {
       quantity: quantity ?? this.quantity,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'price': price,
+      'imageUrl': imageUrl,
+      'rating': rating,
+      'reviewCount': reviewCount,
+      'description': description,
+      'categoryName': categoryName,
+      'isFeatured': isFeatured,
+      'isFlashSale': isFlashSale,
+      'isRecommended': isRecommended,
+      'inStock': inStock,
+      'stock': stock,
+      'oldPrice': oldPrice,
+      'discount': discount,
+      'quantity': quantity,
+    };
+  }
+
+  factory ProductItemModel.fromMap(Map<String, dynamic> map,String id) {
+    return ProductItemModel(
+      id: id,
+      name: map['name'] as String,
+      price: map['price'] as int,
+      imageUrl: map['imageUrl'] as String,
+      rating: map['rating'] as double,
+      reviewCount: map['reviewCount'] as int,
+      description: map['description'] as String,
+      categoryName: map['categoryName'] as String,
+      isFeatured: map['isFeatured'] as bool,
+      isFlashSale: map['isFlashSale'] as bool,
+      isRecommended: map['isRecommended'] as bool,
+      inStock: map['inStock'] as bool,
+      stock: map['stock'] as int,
+      oldPrice: map['oldPrice'] != null ? map['oldPrice'] as double : null,
+      discount: map['discount'] != null ? map['discount'] as int : null,
+      quantity: map['quantity'] as int,
+    );
+  }
+//   factory ProductItemModel.fromMap(Map<String, dynamic> map, String id) {
+//   return ProductItemModel(
+//     id: id,
+//     // بنستخدم ?? لإعطاء قيمة افتراضية لو الحقل مش موجود
+//     name: map['name'] ?? 'بدون اسم',
+    
+//     // الأرقام العشرية: بنحولها الأول لـ num عشان نقبل الـ int والـ double بدون مشاكل
+//     price: map['price'] != null ? (map['price'] as num).toDouble() : 0.0,
+//     rating: map['rating'] != null ? (map['rating'] as num).toDouble() : 0.0,
+//     oldPrice: map['oldPrice'] != null ? (map['oldPrice'] as num).toDouble() : null,
+    
+//     imageUrl: map['imageUrl'] ?? '',
+//     reviewCount: map['reviewCount'] ?? 0,
+//     description: map['description'] ?? '',
+//     categoryName: map['categoryName'] ?? '',
+    
+//     // إصلاح خطأ الـ bool (السبب الأساسي لمشكلتك)
+//     isFeatured: map['isFeatured'] ?? false,
+//     isFlashSale: map['isFlashSale'] ?? false,
+//     isRecommended: map['isRecommended'] ?? false,
+//     inStock: map['inStock'] ?? true,
+    
+//     stock: map['stock'] ?? 0,
+//     discount: map['discount'] ?? 0,
+//     quantity: map['quantity'] ?? 1,
+//   );
+// }
 }
 
 List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '1',
     name: 'Apple Watch Ultra 2',
-    price: 799.0,
+    price: 799,
     oldPrice: 899.0,
     discount: 11,
     imageUrl: 'assets/images/apple_watch_ultra 2.webp',
@@ -99,7 +170,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '2',
     name: 'Galaxy Watch Ultra',
-    price: 699.0,
+    price: 699,
     imageUrl: 'assets/images/galaxy_watch_ultra.jfif',
     rating: 4.8,
     reviewCount: 943,
@@ -114,7 +185,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '3',
     name: 'Sony WH-1000XM6',
-    price: 399.0,
+    price: 399,
     oldPrice: 449.0,
     discount: 11,
     imageUrl: 'assets/images/sony_wH-1000XM6.jfif',
@@ -131,7 +202,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '4',
     name: 'AirPods Pro 3',
-    price: 249.0,
+    price: 249,
     imageUrl: 'assets/images/airpods_pro 3.jfif',
     rating: 4.8,
     reviewCount: 1750,
@@ -145,7 +216,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '5',
     name: 'Nothing Ear (3)',
-    price: 149.0,
+    price: 149,
     imageUrl: 'assets/images/nothing_Ear(3).jfif',
     rating: 4.7,
     reviewCount: 618,
@@ -158,7 +229,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '6',
     name: 'iPhone 17 Pro',
-    price: 1299.0,
+    price: 1299,
     imageUrl: 'assets/images/iPhone_17_pro.jfif',
     rating: 5.0,
     reviewCount: 310,
@@ -174,7 +245,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '7',
     name: 'Galaxy S26 Ultra',
-    price: 1199.0,
+    price: 1199,
     oldPrice: 1299.0,
     discount: 8,
     imageUrl: 'assets/images/galaxy_s26_ultra.jfif',
@@ -190,7 +261,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '8',
     name: 'Google Pixel 11 Pro',
-    price: 999.0,
+    price: 999,
     imageUrl: 'assets/images/google_pixel_11_pro.jfif',
     rating: 4.8,
     reviewCount: 542,
@@ -203,7 +274,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '9',
     name: 'MacBook Pro M6',
-    price: 2499.0,
+    price: 2499,
     imageUrl: 'assets/images/macbook_pro_m6.jfif',
     rating: 5.0,
     reviewCount: 267,
@@ -217,7 +288,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '10',
     name: 'ASUS ROG Zephyrus G16',
-    price: 2199.0,
+    price: 2199,
     imageUrl: 'assets/images/asus_rog_zephyrus_g16.jfif',
     rating: 4.9,
     reviewCount: 731,
@@ -231,7 +302,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '11',
     name: 'Logitech MX Master 4',
-    price: 129.0,
+    price: 129,
     imageUrl: 'assets/images/logitech_mx_master_4.jfif',
     rating: 4.9,
     reviewCount: 1987,
@@ -244,7 +315,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '12',
     name: 'Keychron K8 Pro',
-    price: 109.0,
+    price: 109,
     imageUrl: 'assets/images/keychron_k8_pro.jfif',
     rating: 4.8,
     reviewCount: 902,
@@ -260,7 +331,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '13',
     name: 'DJI Mini 5 Pro',
-    price: 999.0,
+    price: 999,
     imageUrl: 'assets/images/dJI_mini_5_pro.jfif',
     rating: 4.9,
     reviewCount: 411,
@@ -274,7 +345,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '14',
     name: 'Anker Prime Power Bank',
-    price: 149.0,
+    price: 149,
     imageUrl: 'assets/images/anker_prime_power_bank.jfif',
     rating: 4.8,
     reviewCount: 1245,
@@ -287,7 +358,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '15',
     name: 'Kindle Paperwhite',
-    price: 179.0,
+    price: 179,
     imageUrl: 'assets/images/kindle_paperwhite.jfif',
     rating: 4.9,
     reviewCount: 3289,

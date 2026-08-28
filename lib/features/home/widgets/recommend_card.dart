@@ -61,13 +61,15 @@ class RecommendCard extends StatelessWidget {
                 SizedBox(height: AppSpacing.sm),
                 Text(
                   product.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
                 ),
                 SizedBox(height: AppSpacing.sm),
 
-                Text("\$${product.price}",style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.primary,fontWeight: FontWeight.w900),),
+                Text("\$${product.price.toStringAsFixed(0)}",style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.primary,fontWeight: FontWeight.w900),),
               ],
             ),
           ),

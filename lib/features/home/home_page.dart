@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
                     children: [
                       Header(),
                       SizedBox(height: AppSpacing.xl),
-                      HomeCarousel(),
+                      HomeCarousel(sliders: state.carousel ,),
                       SizedBox(height: AppSpacing.xl),
                       SectionHome(title: "Categories"),
                       SizedBox(
@@ -55,11 +55,11 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: AppSpacing.xl),
-                      FeaturedSection(),
+                      FeaturedSection( productItem: state.productItem,),
                       SizedBox(height: AppSpacing.xl),
-                      FlashDealsSection(),
+                      FlashDealsSection(productItem: state.productItem,),
                       SizedBox(height: AppSpacing.xl),
-                      RecommendSection(),
+                      RecommendSection(productItem: state.productItem,),
                     ],
                   ),
                 ),

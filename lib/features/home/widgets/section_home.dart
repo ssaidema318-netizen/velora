@@ -14,7 +14,10 @@ class SectionHome extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(icon,color: color,size: 30,),
+                        if (icon != null) ...[
+                          Icon(icon,color: color,size: 30,),
+                          const SizedBox(width: 6),
+                        ],
                         Text(
                           title,
                           style: Theme.of(context).textTheme.headlineSmall!

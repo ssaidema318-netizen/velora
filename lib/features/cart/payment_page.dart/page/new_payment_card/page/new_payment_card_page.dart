@@ -30,8 +30,24 @@ class _NewPaymentCardPageState extends State<NewPaymentCardPage> {
     mask: '##/##',
     filter: {'#': RegExp(r'[0-9]')},
   );
+
+  @override
+  void initState() {
+    super.initState();
+    // Repaint the card banner live as the user types, instead of it
+    // only ever showing the placeholder values.
+    cardHolderController.addListener(_onCardFieldsChanged);
+    cardNumberController.addListener(_onCardFieldsChanged);
+    expiryDateController.addListener(_onCardFieldsChanged);
+  }
+
+  void _onCardFieldsChanged() => setState(() {});
+
   @override
   void dispose() {
+    cardHolderController.removeListener(_onCardFieldsChanged);
+    cardNumberController.removeListener(_onCardFieldsChanged);
+    expiryDateController.removeListener(_onCardFieldsChanged);
     cardHolderController.dispose();
     cardNumberController.dispose();
     expiryDateController.dispose();
@@ -69,11 +85,13 @@ class _NewPaymentCardPageState extends State<NewPaymentCardPage> {
                   cardHolderName: cardHolderController.text.isEmpty
                       ? "SAID EMAM"
                       : cardHolderController.text.toUpperCase(),
-                  lastFourDigits: cardNumberController.text.isEmpty
-                      ? "4582"
-                      : cardNumberController.text.substring(
-                          cardNumberController.text.length - 4,
-                        ),
+                  lastFourDigits: cardNumberController.text.length >= 4
+      ? cardNumberController.text.substring(
+          cardNumberController.text.length - 4,
+        )
+      : (cardNumberController.text.isEmpty
+          ? "4582"
+          : cardNumberController.text),
                   expiryDate: expiryDateController.text.isEmpty
                       ? "12/28"
                       : expiryDateController.text,

@@ -53,6 +53,8 @@ class FlashDealCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: AppSpacing.m,right: AppSpacing.m),
               child: Text(
                 product.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
@@ -63,7 +65,7 @@ class FlashDealCard extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "\$${product.price}",
+                    "\$${product.price.toStringAsFixed(0)}",
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFE53935),
@@ -71,7 +73,7 @@ class FlashDealCard extends StatelessWidget {
                   ),
                   SizedBox(width: AppSpacing.m,),
                   Text(
-                    "\$${product.oldPrice}",
+                    "\$${product.oldPrice?.toStringAsFixed(0)}",
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey,

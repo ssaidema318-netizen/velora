@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_routes.dart';
 import 'package:velora/constants/app_spacing.dart';
+import 'package:velora/view_model_services/cubit/auth_cubit.dart';
 import 'package:velora/widgets/app_text_form_field.dart';
 
 class NewAccount extends StatefulWidget {
@@ -20,6 +23,7 @@ class _NewAccountState extends State<NewAccount> {
   final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<AuthCubit>(context);
     return Scaffold(
       appBar: AppBar(backgroundColor: AppColors.background),
       backgroundColor: AppColors.background,
@@ -79,7 +83,7 @@ class _NewAccountState extends State<NewAccount> {
                         textInputAction: TextInputAction.next,
                         inputFormatters: [LengthLimitingTextInputFormatter(10)],
                         obscureText: false,
-                        validator: "Password is required",
+                        validator: "Phone is required",
                         prefixText: "+20",
                         keyboardType: TextInputType.number,
                       ),
@@ -99,20 +103,196 @@ class _NewAccountState extends State<NewAccount> {
                       SizedBox(
                         width: double.infinity,
                         height: 60,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (fromkey.currentState!.validate()) {
+                        child: BlocConsumer<AuthCubit, AuthState>(
+                          bloc: cubit,
+                          listenWhen: ((previous, current) =>
+                              current is AuthDone || current is AuthError),
+                          listener: (context, state) {
+                            if (state is AuthDone) {
                               Navigator.of(
                                 context,
                               ).pushNamed(AppRoutes.customBottomRoute);
+                            } else if (state is AuthError) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(state.message)),
+                              );
                             }
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: AppColors.surface,
-                          ),
-                          child: Text("Creat Account"),
+                          buildWhen: (previous, current) =>
+                              current is AuthLoading ||
+                              current is AuthDone ||
+                              current is AuthError,
+                          builder: (context, state) {
+                            if (state is AuthLoading) {
+                              return ElevatedButton(
+                                onPressed: null,
+
+                                child: CircularProgressIndicator.adaptive(),
+                              );
+                            }
+                            return ElevatedButton(
+                              onPressed: () async {
+                                if (fromkey.currentState!.validate()) {
+                                  await cubit.registerWithEmailandPassword(
+                                    nameController.text.trim(),
+                                    emailController.text.trim(),
+                                    passwordController.text,
+                                    phoneController.text.trim(),
+
+                                  );
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: AppColors.surface,
+                              ),
+                              child: Text("Creat Account"),
+                            );
+                          },
                         ),
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      Row(
+                        children: const [
+                          Expanded(
+                            child: Divider(thickness: 1, color: Colors.grey),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.sm,
+                            ),
+                            child: Text(
+                              'or create with',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(thickness: 1, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: BlocConsumer<AuthCubit, AuthState>(
+                              bloc: cubit,
+                              listenWhen: (previous, current) => current is GoogleDone || current is GoogleError,
+                              listener: (context, state) {
+                                if (state is GoogleDone) {
+                              Navigator.of(
+                                context,
+                              ).pushNamed(AppRoutes.customBottomRoute);
+                            } else if (state is GoogleError) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(state.message)),
+                              );
+                            }
+                              },
+                              buildWhen: (previous, current) => current is GoogleLoading,
+                              builder: (context, state) {
+                                if(state is GoogleLoading){
+                                  return Chip(
+                                    backgroundColor: AppColors.background,
+                                    labelPadding: EdgeInsets.all(AppSpacing.xs),
+                                    label: CircularProgressIndicator.adaptive()
+                                  );
+                                }
+                                return InkWell(
+                                  onTap: () {cubit.signInwithGoogle();},
+                                  child: Chip(
+                                    backgroundColor: AppColors.background,
+                                    labelPadding: EdgeInsets.all(AppSpacing.xs),
+                                    label: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl:
+                                              "https://cdn.brandfetch.io/id6O2oGzv-/w/800/h/817/theme/dark/symbol.png?c=1dxbfHSJFAPEGdCLU4o5B",
+                                          height: 30,
+                                          width: 30,
+                                        ),
+                                        const SizedBox(width: AppSpacing.m),
+                                        Text(
+                                          "Google",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge!
+                                              .copyWith(
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.l),
+                          Expanded(
+                            child: BlocConsumer<AuthCubit, AuthState>(
+                              bloc: cubit,
+                              listenWhen: (previous, current) =>
+                                  current is FacebookAuthDone || current is FacebookAuthError,
+                              listener: (context, state) {
+                                if (state is FacebookAuthDone) {
+                                  Navigator.of(
+                                    context,
+                                  ).pushNamed(AppRoutes.customBottomRoute);
+                                } else if (state is FacebookAuthError) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(state.message)),
+                                  );
+                                }
+                              },
+                              buildWhen: (previous, current) => current is FacebookAuthLoading,
+                              builder: (context, state) {
+                                if (state is FacebookAuthLoading) {
+                                  return Chip(
+                                    backgroundColor: AppColors.background,
+                                    labelPadding: EdgeInsets.all(AppSpacing.xs),
+                                    label: CircularProgressIndicator.adaptive(),
+                                  );
+                                }
+                                return InkWell(
+                                  onTap: () {
+                                    cubit.signInwithFacebook();
+                                  },
+                                  child: Chip(
+                                    backgroundColor: AppColors.background,
+                                    labelPadding: EdgeInsets.all(AppSpacing.xs),
+                                    label: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl:
+                                              "https://cdn.brandfetch.io/idpKX136kp/w/400/h/400/theme/dark/icon.jpeg?c=1dxbfHSJFAPEGdCLU4o5B",
+                                          height: 30,
+                                          width: 30,
+                                        ),
+                                        const SizedBox(width: AppSpacing.m),
+                                        Text(
+                                          "Facebook",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge!
+                                              .copyWith(
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: AppSpacing.md),
                       Row(

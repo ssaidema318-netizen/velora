@@ -5,11 +5,12 @@ import 'package:velora/features/home/widgets/section_home.dart';
 import 'package:velora/models/product_item_model.dart';
 
 class FeaturedSection extends StatelessWidget {
-  const FeaturedSection({super.key});
+  final List<ProductItemModel> productItem;
+  const FeaturedSection({super.key, required this.productItem});
 
   @override
   Widget build(BuildContext context) {
-    final featuredProducts = dummyProducts.where((e) => e.isFeatured).toList();
+    final featuredProducts = productItem.where((e) => e.isFeatured).toList();
     return Column(
       children: [
         SectionHome(

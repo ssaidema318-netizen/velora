@@ -53,6 +53,8 @@ class FeaturedProduct extends StatelessWidget {
 
             Text(
               product.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(
                 context,
               ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
@@ -76,7 +78,7 @@ class FeaturedProduct extends StatelessWidget {
             ),
             SizedBox(height: AppSpacing.sm),
             Text(
-              "\$${product.price}",
+              "\$${product.price.toStringAsFixed(0)}",
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: AppColors.primary,
                 fontWeight: FontWeight.bold,

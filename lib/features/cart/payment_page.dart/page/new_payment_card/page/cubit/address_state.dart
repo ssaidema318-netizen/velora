@@ -14,17 +14,17 @@ final class FetchAddressError extends AddressState {
 
   FetchAddressError({required this.message});
 }
-final class AddingLocation extends AddressInitial{}
-final class LocationAdded extends AddressInitial{}
-final class LocationAddingFailure extends AddressInitial{}
-final class LocationChosen extends AddressInitial{
+final class AddingLocation extends AddressState{}
+final class LocationAdded extends AddressState{}
+final class LocationAddingFailure extends AddressState{}
+final class LocationChosen extends AddressState{
   final AddressModel location;
 
   LocationChosen({required this.location});
 }
-final class ConfirmAddressLoading extends AddressInitial{}
-final class ConfirmAddressLoaded extends AddressInitial{}
-final class ConfirmAddressError extends AddressInitial{
+final class ConfirmAddressLoading extends AddressState{}
+final class ConfirmAddressLoaded extends AddressState{}
+final class ConfirmAddressError extends AddressState{
   final String message;
 
   ConfirmAddressError({required this.message});

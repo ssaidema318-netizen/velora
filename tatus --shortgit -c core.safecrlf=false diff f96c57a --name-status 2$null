@@ -1,0 +1,59 @@
+warning: in the working copy of 'android/app/build.gradle.kts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'android/app/google-services.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'android/settings.gradle.kts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'ios/Runner/Info.plist', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/constants/app_radius.dart', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/constants/app_shadows.dart', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/features/cart/cubit/cart_cubit.dart', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/features/cart/payment_page.dart/page/new_payment_card/page/cubit/address_state.dart', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/features/home/product_details/cubit/product_details_cubit.dart', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/features/home/product_details/cubit/product_details_state.dart', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/theme/app_theme.dart', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/typography/app_text_style.dart', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'linux/flutter/generated_plugin_registrant.cc', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'linux/flutter/generated_plugins.cmake', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'macos/Flutter/GeneratedPluginRegistrant.swift', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'pubspec.lock', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'windows/flutter/generated_plugin_registrant.cc', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'windows/flutter/generated_plugins.cmake', LF will be replaced by CRLF the next time Git touches it
+M	android/app/build.gradle.kts
+M	android/app/google-services.json
+M	android/app/src/main/AndroidManifest.xml
+D	android/app/src/main/kotlin/com/example/velora/MainActivity.kt
+M	android/settings.gradle.kts
+M	ios/Runner/Info.plist
+D	lib.zip
+M	lib/constants/app_radius.dart
+M	lib/constants/app_router.dart
+M	lib/constants/app_shadows.dart
+M	lib/features/cart/cubit/cart_cubit.dart
+M	lib/features/cart/payment_page.dart/page/new_payment_card/page/cubit/address_state.dart
+M	lib/features/cart/payment_page.dart/page/new_payment_card/page/new_payment_card_page.dart
+M	lib/features/cart/payment_page.dart/widgets/delivery_address.dart
+M	lib/features/cart/payment_page.dart/widgets/payment_method_empty.dart
+M	lib/features/cart/widgets/product_card.dart
+M	lib/features/home/product_details/cubit/product_details_cubit.dart
+M	lib/features/home/product_details/cubit/product_details_state.dart
+M	lib/features/home/product_details/widgets/body_product_datails.dart
+M	lib/features/home/product_details/widgets/information_product.dart
+M	lib/features/home/widgets/featured_product.dart
+M	lib/features/home/widgets/flash_deal_card.dart
+M	lib/features/home/widgets/recommend_card.dart
+M	lib/features/home/widgets/section_home.dart
+M	lib/features/login/page/login.dart
+M	lib/features/login/page/new_account.dart
+M	lib/features/profile/profile_page.dart
+M	lib/main.dart
+M	lib/models/carousel_slider.dart
+M	lib/services/auth_services.dart
+M	lib/theme/app_theme.dart
+M	lib/typography/app_text_style.dart
+D	lib/view_model_services/cubit/auth_services_cubit.dart
+D	lib/view_model_services/cubit/auth_services_state.dart
+M	linux/flutter/generated_plugin_registrant.cc
+M	linux/flutter/generated_plugins.cmake
+M	macos/Flutter/GeneratedPluginRegistrant.swift
+M	pubspec.lock
+M	pubspec.yaml
+M	windows/flutter/generated_plugin_registrant.cc
+M	windows/flutter/generated_plugins.cmake

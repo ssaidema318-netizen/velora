@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_routes.dart';
 import 'package:velora/constants/app_spacing.dart';
+import 'package:velora/core/responsive.dart';
 import 'package:velora/features/cart/payment_page.dart/cubit/payment_cubit.dart';
 
 class DeliveryAddress extends StatelessWidget {
@@ -46,7 +47,7 @@ class DeliveryAddress extends StatelessWidget {
             const SizedBox(height: AppSpacing.l),
             SizedBox(
               height: 60,
-              width: 300,
+              width: context.wp(80) > 300 ? 300 : context.wp(80),
               child: ElevatedButton(
                 onPressed: ()async{// PaymentPage
 final result = await Navigator.of(context).pushNamed(AppRoutes.chooseAddressPageRoute);

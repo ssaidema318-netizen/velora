@@ -1,0 +1,19 @@
+[1mdiff --git a/android/app/src/main/AndroidManifest.xml b/android/app/src/main/AndroidManifest.xml[m
+[1mindex 117a590..5feb9e5 100644[m
+[1m--- a/android/app/src/main/AndroidManifest.xml[m
+[1m+++ b/android/app/src/main/AndroidManifest.xml[m
+[36m@@ -1,8 +1,14 @@[m
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android">[m
+[32m+[m[32m    <uses-permission android:name="android.permission.INTERNET"/>[m
+[32m+[m[32m    <queries>[m
+[32m+[m[32m        <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />[m
+[32m+[m[32m    </queries>[m
+     <application[m
+         android:label="velora"[m
+         android:name="${applicationName}"[m
+         android:icon="@mipmap/ic_launcher">[m
+[32m+[m[32m        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>[m
+[32m+[m[32m        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>[m
+         <activity[m
+             android:name=".MainActivity"[m
+             android:exported="true"[m
