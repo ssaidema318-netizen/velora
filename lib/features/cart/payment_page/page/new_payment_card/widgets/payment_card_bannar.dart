@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_spacing.dart';
-import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/widgets/card_info.dart';
+import 'package:velora/features/cart/payment_page/page/new_payment_card/widgets/card_info.dart';
 
 
 class PaymentCardBanner extends StatelessWidget {

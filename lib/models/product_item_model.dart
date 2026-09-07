@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:flutter/widgets.dart';
+
 class ProductItemModel {
   final String id;
   final String name;
@@ -100,7 +102,11 @@ class ProductItemModel {
   }
 
   factory ProductItemModel.fromMap(Map<String, dynamic> map,String id) {
+    debugPrint('🔥 Parsing product: $id');
+  debugPrint('🔥 Data: $map');
+
     return ProductItemModel(
+      
       id: id,
       name: map['name'] as String,
       price: map['price'] as int,
@@ -216,7 +222,7 @@ List<ProductItemModel> dummyProducts = [
   ProductItemModel(
     id: '5',
     name: 'Nothing Ear (3)',
-    price: 149,
+    price: 200,
     imageUrl: 'assets/images/nothing_Ear(3).jfif',
     rating: 4.7,
     reviewCount: 618,
@@ -224,6 +230,9 @@ List<ProductItemModel> dummyProducts = [
     categoryName: 'Audio',
     inStock: true,
     stock: 18,
+    oldPrice:150 ,
+    isFlashSale: true,
+    discount: 13
   ),
 
   ProductItemModel(
@@ -269,6 +278,7 @@ List<ProductItemModel> dummyProducts = [
     categoryName: 'Phones',
     inStock: true,
     stock: 14,
+    isFeatured: true,
   ),
 
   ProductItemModel(
@@ -369,3 +379,9 @@ List<ProductItemModel> dummyProducts = [
     stock: 16,
   ),
 ];
+// 1. الدالة المساعدة (يجب أن تكون خارج أي Class)
+List<ProductItemModel> parseProductsIsolate(List<Map<String, dynamic>> rawList) {
+  return rawList
+      .map((json) => ProductItemModel.fromMap(json, json['id'] as String))
+      .toList();
+}

@@ -30,10 +30,21 @@ final class PaymentMethodChosen extends AddNewCardState{
 
 final class ConfirmPaymentLoading extends AddNewCardState {}
 
-final class ConfirmPaymentSuccess extends AddNewCardState {}
+final class ConfirmPaymentSuccess extends AddNewCardState {
+  final PaymentModel chosenPayment;
+
+  ConfirmPaymentSuccess({required this.chosenPayment});
+}
 
 final class ConfirmPaymentFailure extends AddNewCardState {
   final String message;
 
   ConfirmPaymentFailure({required this.message});
+}
+final class PaymentMethodChangeFailure extends AddNewCardState {
+  final String message;
+
+  PaymentMethodChangeFailure({
+    required this.message,
+  });
 }

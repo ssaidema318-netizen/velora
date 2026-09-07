@@ -8,7 +8,7 @@ class FirestoreServices {
 
   FirebaseFirestore get firestore => FirebaseFirestore.instance;
 
-  // add & update data
+  // add 
   Future<void> setData({
     required String path, // Collection/$documentId
     required Map<String, dynamic> data,
@@ -17,6 +17,18 @@ class FirestoreServices {
     debugPrint('$path: $data');
     await reference.set(data);
   }
+
+  // update data
+  Future<void> updateData({
+  required String path,
+  required Map<String, dynamic> data,
+}) async {
+  final reference = firestore.doc(path);
+
+  debugPrint('update: $path => $data');
+
+  await reference.update(data);
+}
 
   Future<void> deleteData({required String path}) async { 
     final reference = firestore.doc(path);
@@ -87,4 +99,42 @@ class FirestoreServices {
     }
     return result;
   }
+  Future<void> batchUpdateData(
+  List<({
+    String path,
+    Map<String, dynamic> data,
+  })> updates,
+) async {
+  final batch = firestore.batch();
+
+  for (final update in updates) {
+    final reference = firestore.doc(update.path);
+
+    batch.update(
+      reference,
+      update.data,
+    );
+  }
+
+  await batch.commit();
+}
+Future<void> batchSetData(
+  List<({
+    String path,
+    Map<String, dynamic> data,
+  })> writes,
+) async {
+  final batch = firestore.batch();
+
+  for (final write in writes) {
+    final reference = firestore.doc(write.path);
+
+    batch.set(
+      reference,
+      write.data,
+    );
+  }
+
+  await batch.commit();
+}
 }

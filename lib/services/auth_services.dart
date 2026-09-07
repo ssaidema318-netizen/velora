@@ -29,6 +29,7 @@ class AuthServicesImpl implements AuthServices {
 
   @override
   Future<bool> registerWithEmailandPassword(
+
     String email,
     String password,
   ) async {

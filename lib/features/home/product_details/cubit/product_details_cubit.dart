@@ -2,12 +2,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/models/add_to_cart_model.dart';
 import 'package:velora/models/product_item_model.dart';
 import 'package:velora/services/auth_services.dart';
+import 'package:velora/services/cart_services.dart';
 import 'package:velora/services/product_details_services.dart';
 
 part 'product_details_state.dart';
 
 class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   final productDetailsServices = ProductDetailsServicesImpl();
+  final cartServices = CartServicesImpl();
   final authservices = AuthServicesImpl();
   ProductItemModel? currentProduct;
   int quantity = 1;
@@ -36,24 +38,52 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
     emit(QuantityCounterLoaded(value: quantity));
   }
 
-  void addToCart(String productId) async{
-    final product = await productDetailsServices.featchProdctDetails(productId);
-    emit(ProductAddingToCart());
-    try{
-      final cartItem = AddToCartModel(
+  Future<void> addToCart(String productId) async {
+  emit(ProductAddingToCart());
+
+  try {
+    final currentUser = authservices.currentUser();
+
+    if (currentUser == null) {
+      emit(
+        ProductAddToCartError(
+          message: 'User is not logged in',
+        ),
+      );
+      return;
+    }
+
+    final product =
+        await productDetailsServices.featchProdctDetails(productId);
+
+    final cartItem = AddToCartModel(
       name: product.name,
       productId: productId,
       quantity: quantity,
       imageUrl: product.imageUrl,
-      price: (product.price).toInt(),
+      price: product.price.toInt(),
       rating: product.rating,
       reviewCount: product.reviewCount,
-      stock: product.stock
+      stock: product.stock,
     );
-    await productDetailsServices.addtoCard(cartItem, authservices.currentUser()!.uid);
-    emit(ProductAddedToCart(productId: productId));
-    }catch (e){emit(ProductAddToCartError(message: e.toString()));}
+
+   await cartServices.addCartItem(
+  currentUser.uid,
+  cartItem,
+);
+    emit(
+      ProductAddedToCart(
+        productId: productId,
+      ),
     
+    );
     
+  } catch (e) {
+    emit(
+      ProductAddToCartError(
+        message: e.toString(),
+      ),
+    );
   }
+}
 }

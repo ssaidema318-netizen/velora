@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_routes.dart';
 import 'package:velora/constants/app_spacing.dart';
-import 'package:velora/features/cart/payment_page.dart/cubit/payment_cubit.dart';
-import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/page/cubit/add_new_card_cubit.dart';
+import 'package:velora/features/cart/payment_page/cubit/payment_cubit.dart';
+import 'package:velora/features/cart/payment_page/page/new_payment_card/page/cubit/add_new_card_cubit.dart';
 import 'package:velora/models/payment_model.dart';
 
 class PaymentMethodItemSheet extends StatelessWidget {
@@ -74,30 +74,20 @@ class PaymentMethodItemSheet extends StatelessWidget {
                           ),
                           title: Text(paymentItem.cardNumber),
                           subtitle: Text(paymentItem.cardHolderName),
-                          trailing:
-                              BlocBuilder<AddNewCardCubit, AddNewCardState>(
-                                buildWhen: (previous, current) =>
-                                    current is PaymentMethodChosen,
-                                builder: (context, cardState) {
-                                  String? selectedId;
-                                  if (cardState is PaymentMethodChosen) {
-                                    selectedId = cardState.chosenPayment.id;
-                                  }
-
-                                  return Radio<String>(
-                                    value: paymentItem.id,
-                                    groupValue:
-                                        selectedId, // ✅ تم ربط القيمة بشكل صحيح
-                                    onChanged: (id) {
-                                      if (id != null) {
-                                        context
-                                            .read<AddNewCardCubit>()
-                                            .changePaymentMethod(id);
-                                      }
-                                    },
-                                  );
-                                },
-                              ),
+                          trailing: Radio<String>(
+                            value: paymentItem.id,
+                            groupValue: state.paymentCards
+                                .where((card) => card.isChosen)
+                                .map((card) => card.id)
+                                .firstOrNull,
+                            onChanged: (id) {
+                              if (id != null) {
+                                context
+                                    .read<AddNewCardCubit>()
+                                    .changePaymentMethod(id);
+                              }
+                            },
+                          ),
                         ),
                       );
                     },
@@ -135,17 +125,22 @@ class PaymentMethodItemSheet extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: BlocConsumer<AddNewCardCubit, AddNewCardState>(
-                      listenWhen: (previous, current) => current is ConfirmPaymentFailure || current is ConfirmPaymentSuccess,
-                      buildWhen: (previous, current) => current is ConfirmPaymentLoading || current is ConfirmPaymentSuccess,
+                      listenWhen: (previous, current) =>
+                          current is ConfirmPaymentFailure ||
+                          current is ConfirmPaymentSuccess,
+                      buildWhen: (previous, current) =>
+                          current is ConfirmPaymentLoading ||
+                          current is ConfirmPaymentSuccess,
                       listener: (context, state) {
-                        if(state is ConfirmPaymentFailure){
+                        if (state is ConfirmPaymentFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.message))
+                            SnackBar(content: Text(state.message)),
                           );
-                        } else if(state is ConfirmPaymentSuccess){
-                          context.read<PaymentCubit>().getPaymentItem();
+                        } else if (state is ConfirmPaymentSuccess) {
+                          context.read<PaymentCubit>().setSelectedPayment(
+                            state.chosenPayment,
+                          );
                           Navigator.of(context).pop();
-                  
                         }
                       },
                       builder: (context, state) {
@@ -154,10 +149,13 @@ class PaymentMethodItemSheet extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                           ),
-                          onPressed:isLoading?null:(){
-                            
-                            BlocProvider.of<AddNewCardCubit>(context).confirmPayment();
-                          },
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  BlocProvider.of<AddNewCardCubit>(
+                                    context,
+                                  ).confirmPayment();
+                                },
                           child: Padding(
                             padding: const EdgeInsets.all(AppSpacing.md),
                             child: Text(

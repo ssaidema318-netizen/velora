@@ -5,39 +5,82 @@ import 'package:velora/features/home/widgets/section_home.dart';
 import 'package:velora/models/product_item_model.dart';
 
 class RecommendSection extends StatelessWidget {
-  final List<ProductItemModel> productItem;
+  const RecommendSection({
+    super.key,
+    required this.productItem,
+  });
 
-  const RecommendSection({super.key, required this.productItem});
+  final List<ProductItemModel> productItem;
 
   @override
   Widget build(BuildContext context) {
-    final recommendItems = productItem.where((e) => e.isRecommended).toList();
-    return Column(
-      children: [
-        SectionHome(title: "Recommend For You"),
-        GridView.builder(
-          shrinkWrap: true,
-          itemCount: recommendItems.length,
+    final recommendItems =
+        productItem.where((e) => e.isRecommended).toList();
 
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 252,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 16,
-            childAspectRatio: 0.62,
-          ),
+    if (recommendItems.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
-          itemBuilder: (context, index) => InkWell(
-            onTap: () {
-              Navigator.of(context, rootNavigator: true).pushNamed(
-                AppRoutes.producDetailsRoute,
-                arguments: recommendItems[index].id,
-              );
-            },
-            child: RecommendCard(product: recommendItems[index]),
-          ),
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+
+        final int columns = _getColumns(width);
+
+        final double aspectRatio = width < 600
+            ? 0.68
+            : width < 900
+                ? 0.70
+                : 0.72;
+
+        return Column(
+          children: [
+            const SectionHome(
+              title: 'Recommend For You',
+            ),
+
+            const SizedBox(height: 8),
+
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: recommendItems.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: columns,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 16,
+                childAspectRatio: aspectRatio,
+              ),
+              itemBuilder: (context, index) {
+                final product = recommendItems[index];
+
+                return InkWell(
+                  borderRadius: BorderRadius.circular(24),
+                  onTap: () {
+                    Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).pushNamed(
+                      AppRoutes.producDetailsRoute,
+                      arguments: product.id,
+                    );
+                  },
+                  child: RecommendCard(
+                    product: product,
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
+  }
+
+  int _getColumns(double width) {
+    if (width < 600) return 2;
+    if (width < 900) return 3;
+    if (width < 1200) return 4;
+    return 5;
   }
 }

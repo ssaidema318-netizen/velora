@@ -8,58 +8,130 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 100,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+
+        final bool isMobile = width < 600;
+
+        final double avatarRadius = isMobile ? 27 : 34;
+
+        return SizedBox(
+          height: isMobile ? 78 : 92,
+          child: Row(
             children: [
-              CircleAvatar(
-                radius: 35,
-                backgroundImage: AssetImage("assets/images/profile.jfif"),
+              Expanded(
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: avatarRadius,
+                      backgroundImage: const AssetImage(
+                        'assets/images/profile.jfif',
+                      ),
+                    ),
+
+                    SizedBox(
+                      width: isMobile
+                          ? AppSpacing.sm
+                          : AppSpacing.l,
+                    ),
+
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  'Hallo, ',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(
+                                        fontSize: isMobile ? 18 : 22,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+
+                              Flexible(
+                                child: Text(
+                                  'Said',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(
+                                        fontSize: isMobile ? 18 : 22,
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+
+                              const SizedBox(width: 4),
+
+                              Text(
+                                '👋',
+                                style: TextStyle(
+                                  fontSize: isMobile ? 20 : 25,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: AppSpacing.xs),
+
+                          Text(
+                            'What are you looking for today?',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  color: AppColors.textHint,
+                                  fontSize: isMobile ? 11 : 14,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(width: AppSpacing.l),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+
+              const SizedBox(width: AppSpacing.sm),
+
+              Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        "Hallo,",
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "Said  ",
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Icon(Icons.waving_hand_rounded,color: Colors.amber,size: 30,)
-                    ],
+                  IconBotton(
+                    onPressed: () {},
+                    icon: Icons.notifications_none_outlined,
                   ),
-                  const SizedBox(height: AppSpacing.m),
-                  Text(
-                    "What are you looking for today?",
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.textHint),
+
+                  SizedBox(
+                    width: isMobile
+                        ? AppSpacing.xs
+                        : AppSpacing.sm,
+                  ),
+
+                  IconBotton(
+                    icon: Icons.shopping_cart_outlined,
+                    onPressed: () {},
                   ),
                 ],
               ),
             ],
           ),
-          Row(
-            children: [
-              IconBotton(onPressed: () {}, icon: Icons.notifications_none_outlined),
-              SizedBox(width: AppSpacing.l,),
-              IconBotton(icon: Icons.shopping_cart_outlined, onPressed: () {}),
-            ],
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

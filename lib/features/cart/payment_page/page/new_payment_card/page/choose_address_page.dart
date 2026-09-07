@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_spacing.dart';
-import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/page/cubit/address_cubit.dart';
-import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/widgets/location_item.dart';
+import 'package:velora/features/cart/payment_page/page/new_payment_card/page/cubit/address_cubit.dart';
+import 'package:velora/features/cart/payment_page/page/new_payment_card/widgets/location_item.dart';
 
 class ChooseAddressPage extends StatefulWidget {
   const ChooseAddressPage({super.key});
@@ -30,7 +30,7 @@ class _ChooseAddressPageState extends State<ChooseAddressPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AddressCubit()..fetchAddress(),
+      create: (context) => AddressCubit()..watchAddresses(),
       child: Scaffold(
         appBar: AppBar(title: const Center(child: Text("Address"))),
         body: Padding(
@@ -152,65 +152,62 @@ class _ChooseAddressPageState extends State<ChooseAddressPage> {
                 const SizedBox(height: AppSpacing.m),
 
                 // Addresses List Block
-                BlocBuilder<AddressCubit, AddressState>(
-                  builder: (context, state) {
-                    if (state is FetchingAddress) {
-                      return const Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      );
-                    }
+              BlocBuilder<AddressCubit, AddressState>(
+  buildWhen: (previous, current) =>
+      current is FetchingAddress ||
+      current is FetchedAddress ||
+      current is FetchAddressError ||
+      current is LocationChosen,
+  builder: (context, state) {
+    if (state is FetchingAddress) {
+      return const Center(
+        child: CircularProgressIndicator.adaptive(),
+      );
+    }
 
-                    if (state is FetchAddressError) {
-                      return Center(child: Text(state.message));
-                    }
+    if (state is FetchAddressError) {
+      return Center(
+        child: Text(state.message),
+      );
+    }
 
-                    if (state is FetchedAddress) {
-                      final locations = state.address;
-                      if (locations.isEmpty) {
-                        return const Center(child: Text("No addresses found"));
-                      }
+    if (state is FetchedAddress) {
+      final locations = state.address;
 
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: locations.length,
-                        itemBuilder: (context, index) {
-                          final item = locations[index];
+      if (locations.isEmpty) {
+        return const Center(
+          child: Text("No addresses found"),
+        );
+      }
 
-                          return BlocBuilder<AddressCubit, AddressState>(
-                            buildWhen: (previous, current) =>
-                                current is LocationChosen,
-                            builder: (context, state) {
-                              if (state is LocationChosen) {
-                                return LocationItem(
-                                  onTap: () {
-                                    context.read<AddressCubit>().selectLocation(
-                                      item.id,
-                                    );
-                                  },
-                                  location: item,
-                                  color: state.location.id == item.id
-                                      ? AppColors.primary
-                                      : AppColors.iconSecondary,
-                                );
-                              }
-                              return LocationItem(
-                                onTap: () {
-                                  context.read<AddressCubit>().selectLocation(
-                                    item.id,
-                                  );
-                                },
-                                location: item,
-                              );
-                            },
-                          );
-                        },
-                      );
-                    }
+      final cubit = context.read<AddressCubit>();
 
-                    return const SizedBox.shrink();
-                  },
-                ),
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: locations.length,
+        itemBuilder: (context, index) {
+          final item = locations[index];
+
+          final isSelected =
+              cubit.selectedLocationId == item.id;
+
+          return LocationItem(
+            onTap: () {
+              cubit.selectLocation(item.id);
+            },
+            location: item,
+            color: isSelected
+                ? AppColors.primary
+                : AppColors.iconSecondary,
+          );
+        },
+      );
+    }
+
+    return const SizedBox.shrink();
+  },
+),
 
                 const SizedBox(height: AppSpacing.l),
                 SizedBox(

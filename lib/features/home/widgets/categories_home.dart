@@ -13,67 +13,67 @@ class CategoriesHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-  height: 100,
-  width: 100,
-  margin: const EdgeInsets.all(AppSpacing.m),
-  decoration: BoxDecoration(
-    shape: BoxShape.circle,
-    color: categoryItem.color.withValues(alpha: 0.10),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black.withValues(alpha: 0.18),
-        blurRadius: 20,
-        spreadRadius: 1,
-        offset: const Offset(0, 10),
-      ),
-    ],
-  ),
-  child: Container(
-    margin: const EdgeInsets.all(5),
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: 0.12),
-          blurRadius: 8,
-          offset: const Offset(0, 5),
-        ),
-      ],
-    ),
-    clipBehavior: Clip.antiAlias,
-    child: CachedNetworkImage(
-      imageUrl: categoryItem.imageUrl,
-      fit: BoxFit.cover,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final screenWidth = MediaQuery.sizeOf(context).width;
 
-      placeholder: (context, url) => Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: categoryItem.color,
-        ),
-      ),
+        final double imageSize = screenWidth < 600
+            ? 78
+            : screenWidth < 1024
+                ? 88
+                : 96;
 
-      errorWidget: (context, url, error) => Icon(
-        Icons.image_not_supported_outlined,
-        color: categoryItem.color,
-      ),
-    ),
-  ),
-),
+        return SizedBox(
+          width: imageSize + 20,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: imageSize,
+                height: imageSize,
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: categoryItem.color.withValues(alpha: 0.10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.07),
+                      blurRadius: 14,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+                child: ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: categoryItem.imageUrl,
+                    fit: BoxFit.cover,
+                    fadeInDuration: Duration.zero,
+                    fadeOutDuration: Duration.zero,
+                    placeholder: (_, _) => const SizedBox.shrink(),
+                    errorWidget: (_, _, _) {
+                      return Icon(
+                        Icons.image_not_supported_outlined,
+                        size: imageSize * 0.30,
+                        color: categoryItem.color,
+                      );
+                    },
+                  ),
+                ),
+              ),
 
-        const SizedBox(height: AppSpacing.xs),
+              const SizedBox(height: AppSpacing.xs),
 
-        Text(
-          categoryItem.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-      ],
+              Text(
+                categoryItem.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

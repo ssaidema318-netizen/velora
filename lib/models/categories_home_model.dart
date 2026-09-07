@@ -16,7 +16,7 @@ class CategoriesHomeModel {
   });
 
   Map<String, dynamic> toMap() {
-    return {'title': title, 'imageUrl': imageUrl, 'color': color.value};
+    return {'title': title, 'imageUrl': imageUrl, 'color': color.toARGB32()};
   }
 
   factory CategoriesHomeModel.fromMap(
@@ -38,7 +38,7 @@ const List<CategoriesHomeModel> dummyCategories = [
     title: 'Phones',
     color: Color(0xFF3B82F6),
     imageUrl:
-        'https://images.pexels.com/photos/11216329/pexels-photo-11216329.jpeg',
+        'https://ar.pngtree.com/freepng/modern-smartphone-with-large-screen---mobile-phone-clipart_21183194.html',
   ),
   CategoriesHomeModel(
     id: '2',

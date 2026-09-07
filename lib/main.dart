@@ -5,16 +5,18 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:velora/constants/app_router.dart';
 import 'package:velora/constants/app_routes.dart';
 import 'package:velora/features/cart/cubit/cart_cubit.dart';
-import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/page/cubit/add_new_card_cubit.dart';
+import 'package:velora/features/cart/payment_page/cubit/payment_cubit.dart';
+import 'package:velora/features/cart/payment_page/page/new_payment_card/page/cubit/add_new_card_cubit.dart';
+import 'package:velora/features/favorite/cubit/favorite_cubit.dart';
 import 'package:velora/firebase_options.dart';
+import 'package:velora/services/auth_services.dart';
+import 'package:velora/services/home_services.dart';
 import 'package:velora/theme/app_theme.dart';
 import 'package:velora/view_model_services/cubit/auth_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // The "web" (client_type 3) OAuth client from google-services.json.
   // With google_sign_in v7+, Android throws
   // GoogleSignInException(clientConfigurationError,
@@ -25,16 +27,27 @@ void main() async {
     serverClientId:
         '378440085296-qlnjvmiatk592q59t4o2avnvcfp95v5n.apps.googleusercontent.com',
   );
+  
+  
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => CartCubit()..getCartItems()),
-        BlocProvider(create: (_) => AddNewCardCubit()),
-        BlocProvider(create: (_) {
-          final cubit =AuthCubit();
-          cubit.checkAuth();
-          return cubit;
-        }),
+        BlocProvider(create: (_) => CartCubit()..watchCart()),
+        BlocProvider(create: (_) => AddNewCardCubit()..watchPaymentMethods()),
+        BlocProvider(create: (_)=>PaymentCubit()..watchPaymentData()),
+        BlocProvider(
+          create: (_) {
+            final cubit = AuthCubit();
+            cubit.checkAuth();
+            return cubit;
+          },
+        ),
+        BlocProvider(
+          create: (_) => FavoriteCubit(
+            homeServices: HomeServicesImpl(),
+            authServices: AuthServicesImpl(),
+          ),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -48,7 +61,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
-      buildWhen: (previous, current) => current is AuthDone || current is AuthInitial,
+      buildWhen: (previous, current) =>
+          current is AuthDone || current is AuthInitial,
       builder: (context, state) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -68,7 +82,9 @@ class MyApp extends StatelessWidget {
               child: child!,
             );
           },
-          initialRoute:state is AuthDone? AppRoutes.customBottomRoute: AppRoutes.logInRoute,
+          initialRoute: state is AuthDone
+              ? AppRoutes.customBottomRoute
+              : AppRoutes.logInRoute,
           onGenerateRoute: AppRouter.onGenerateRoute,
         );
       },

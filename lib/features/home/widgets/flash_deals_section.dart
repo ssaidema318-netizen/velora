@@ -5,34 +5,81 @@ import 'package:velora/features/home/widgets/section_home.dart';
 import 'package:velora/models/product_item_model.dart';
 
 class FlashDealsSection extends StatelessWidget {
+  const FlashDealsSection({
+    super.key,
+    required this.productItem,
+  });
+
   final List<ProductItemModel> productItem;
-  const FlashDealsSection({super.key, required this.productItem});
 
   @override
   Widget build(BuildContext context) {
-    final flahDeals = productItem.where((e) => e.isFlashSale).toList();
-    return Column(
-      children: [
-        SectionHome(title: "🔥 Flash Deals"),
-        SizedBox(
-          height: 320,
-          child: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: flahDeals.length,
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            itemBuilder: (context, index) => InkWell(
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).pushNamed(
-                  AppRoutes.producDetailsRoute,
-                  arguments: flahDeals[index].id,
-                );
-              },
-              child: FlashDealCard(product: flahDeals[index]),
+    final flashDeals =
+        productItem.where((e) => e.isFlashSale).toList();
+
+    if (flashDeals.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+
+        final double cardWidth = width < 600
+            ? 175
+            : width < 1024
+                ? 200
+                : 220;
+
+        final double sectionHeight = width < 600
+            ? 305
+            : width < 1024
+                ? 325
+                : 345;
+
+        return Column(
+          children: [
+            const SectionHome(
+              title: '🔥 Flash Deals',
             ),
-          ),
-        ),
-      ],
+
+            const SizedBox(height: 8),
+
+            SizedBox(
+              height: sectionHeight,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemCount: flashDeals.length,
+                separatorBuilder: (_, _) =>
+                    const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  final product = flashDeals[index];
+
+                  return SizedBox(
+                    width: cardWidth,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(24),
+                      onTap: () {
+                        Navigator.of(
+                          context,
+                          rootNavigator: true,
+                        ).pushNamed(
+                          AppRoutes.producDetailsRoute,
+                          arguments: product.id,
+                        );
+                      },
+                      child: FlashDealCard(
+                        product: product,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

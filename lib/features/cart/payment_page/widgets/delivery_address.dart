@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_routes.dart';
 import 'package:velora/constants/app_spacing.dart';
 import 'package:velora/core/responsive.dart';
-import 'package:velora/features/cart/payment_page.dart/cubit/payment_cubit.dart';
 
-class PaymentMethodEmpty extends StatelessWidget {
-  const PaymentMethodEmpty({super.key});
+class DeliveryAddress extends StatelessWidget {
+  const DeliveryAddress({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: size.height * 0.20,
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.background,
@@ -31,15 +29,15 @@ class PaymentMethodEmpty extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: AppSpacing.m),
-            Icon(Icons.credit_card, color: AppColors.primary, size: 40),
+            Icon(Icons.location_pin, color: AppColors.primary, size: 40),
             const SizedBox(height: AppSpacing.m),
             Text(
-              "No Payment Method",
+              "No Delivery Address",
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: AppSpacing.m),
             Text(
-              "Add a payment method to proceed",
+              "Add an address to deliver your arder",
               style: Theme.of(
                 context,
               ).textTheme.titleMedium!.copyWith(color: AppColors.textHint),
@@ -49,14 +47,18 @@ class PaymentMethodEmpty extends StatelessWidget {
               height: 60,
               width: context.wp(80) > 300 ? 300 : context.wp(80),
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(AppRoutes.newPaymentCardPageRoute).then((_)=>BlocProvider.of<PaymentCubit>(context).getPaymentItem());
-                },
+                onPressed: ()async{// PaymentPage
+await Navigator.of(context).pushNamed(AppRoutes.chooseAddressPageRoute);
+
+// if (result == true) {
+//   context.read<PaymentCubit>().getPaymentItem();
+// }
+},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                 ),
                 child: Text(
-                  "+ Add Payment Method",
+                  "+ Add Delivery Address",
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: AppColors.surface,
                     fontWeight: FontWeight.w700,

@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_routes.dart';
 import 'package:velora/constants/app_spacing.dart';
-import 'package:velora/features/cart/payment_page.dart/cubit/payment_cubit.dart';
-import 'package:velora/features/cart/payment_page.dart/page/new_payment_card/page/cubit/add_new_card_cubit.dart';
-import 'package:velora/features/cart/payment_page.dart/widgets/delivery_address.dart';
-import 'package:velora/features/cart/payment_page.dart/widgets/header_payment.dart';
-import 'package:velora/features/cart/payment_page.dart/widgets/order_summary.dart';
-import 'package:velora/features/cart/payment_page.dart/widgets/payment_method_empty.dart';
-import 'package:velora/features/cart/payment_page.dart/widgets/payment_method_item.dart';
-import 'package:velora/features/cart/payment_page.dart/widgets/payment_method_item_sheet.dart';
+import 'package:velora/features/cart/payment_page/cubit/payment_cubit.dart';
+import 'package:velora/features/cart/payment_page/page/new_payment_card/page/cubit/add_new_card_cubit.dart';
+import 'package:velora/features/cart/payment_page/widgets/delivery_address.dart';
+import 'package:velora/features/cart/payment_page/widgets/header_payment.dart';
+import 'package:velora/features/cart/payment_page/widgets/order_summary.dart';
+import 'package:velora/features/cart/payment_page/widgets/payment_method_empty.dart';
+import 'package:velora/features/cart/payment_page/widgets/payment_method_item.dart';
+import 'package:velora/features/cart/payment_page/widgets/payment_method_item_sheet.dart';
 import 'package:velora/models/address_model.dart';
 import 'package:velora/models/payment_model.dart';
 
@@ -31,7 +31,7 @@ class PaymentPage extends StatelessWidget {
               child: Builder(
                 builder: (context) {
                   final cubit = context.read<AddNewCardCubit>();
-                  cubit.fetchPaymentMethod();
+                  cubit.watchPaymentMethods();
                   return BlocProvider.value(
                     value: cubit,
                     child: const PaymentMethodItemSheet(),
@@ -89,7 +89,7 @@ class PaymentPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final cubit = PaymentCubit();
-        cubit.getPaymentItem();
+        cubit.watchPaymentData();
         return cubit;
       },
       child: Scaffold(
@@ -116,13 +116,11 @@ class PaymentPage extends StatelessWidget {
                         subtitle: "Edit",
                         onPressed: () async {
                           // PaymentPage
-                          final result = await Navigator.of(
+                          await Navigator.of(
                             context,
                           ).pushNamed(AppRoutes.chooseAddressPageRoute);
 
-                          if (result == true) {
-                            context.read<PaymentCubit>().getPaymentItem();
-                          }
+                          
                         },
                       ),
                       const SizedBox(height: AppSpacing.m),

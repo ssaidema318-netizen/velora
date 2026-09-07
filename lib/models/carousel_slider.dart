@@ -23,6 +23,6 @@ class CarouselSliders {
 
 }
 List<CarouselSliders> dummySliders=[
-CarouselSliders(id: "1", imageUrl:"assets/images/carousel_slider_1.png" ),
-CarouselSliders(id: "2", imageUrl:"assets/images/carousel_slider_2.png" ),
-CarouselSliders(id: "3", imageUrl:"assets/images/carousel_slider_3.png" ),];
+CarouselSliders(id: "1", imageUrl:"assets/images/carousel_slider_1.jfif" ),
+CarouselSliders(id: "2", imageUrl:"assets/images/carousel_slider_2.jfif" ),
+CarouselSliders(id: "3", imageUrl:"assets/images/carousel_slider_3.jfif" ),];

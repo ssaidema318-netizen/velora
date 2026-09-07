@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_spacing.dart';
-import 'package:velora/widgets/icon_botton.dart';
+import 'package:velora/features/favorite/cubit/favorite_cubit.dart';
 
 class FeaturedProduct extends StatelessWidget {
-  final product;
+  const FeaturedProduct({
+    super.key,
+    required this.product,
+  });
 
-  const FeaturedProduct({super.key, required this.product});
+  final dynamic product;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -25,63 +28,157 @@ class FeaturedProduct extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.l),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.l,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(AppSpacing.md),
-                  child: AspectRatio(
-                    aspectRatio: 0.85,
-                    child: Hero(tag: product.id,
-                    child: Image.asset(product.imageUrl, fit: BoxFit.cover)),
+            Expanded(
+              flex: 6,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Padding(
+                      padding: const EdgeInsets.all(
+                        AppSpacing.md,
+                      ),
+                      child: Hero(
+                        tag: product.id,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(18),
+                          child: Image.asset(
+                            product.imageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                Positioned(
-                  right: 0,
-                  top: 2,
-                  child: IconBotton(
-                    icon: Icons.favorite_border,
-                    onPressed: () {},
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: AppSpacing.sm),
 
-            Text(
-              product.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
-            ),
-            SizedBox(height: AppSpacing.sm),
-            Row(
-              children: [
-                Text(
-                  "⭐ ${product.rating} ",
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.w600,
+                  Positioned(
+                    right: 0,
+                    top: 8,
+                    child: BlocSelector<
+                        FavoriteCubit,
+                        FavoriteState,
+                        bool>(
+                      selector: (state) {
+                        return state.favoriteIds.contains(
+                          product.id,
+                        );
+                      },
+                      builder: (context, isFavorite) {
+                        final isLoading = context.select<
+                            FavoriteCubit,
+                            bool>(
+                          (cubit) =>
+                              cubit.state.processingProductId ==
+                              product.id,
+                        );
+
+                        if (isLoading) {
+                          return const SizedBox(
+                            width: 35,
+                            height: 35,
+                            child: Padding(
+                              padding: EdgeInsets.all(6),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          );
+                        }
+
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(30),
+                          onTap: () {
+                            context
+                                .read<FavoriteCubit>()
+                                .toggleFavorite(product);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: Icon(
+                              isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              size: 30,
+                              color: isFavorite
+                                  ? AppColors.discount
+                                  : AppColors.iconSecondary,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                Text(
-                  " (${product.reviewCount})",
-                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-            SizedBox(height: AppSpacing.sm),
-            Text(
-              "\$${product.price.toStringAsFixed(0)}",
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
+
+            Expanded(
+              flex: 4,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  bottom: AppSpacing.m,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      product.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+
+                    const SizedBox(height: AppSpacing.xs),
+
+                    Row(
+                      children: [
+                        Text(
+                          '⭐ ${product.rating}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+
+                        Text(
+                          ' (${product.reviewCount})',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelMedium
+                              ?.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: AppSpacing.xs),
+
+                    Text(
+                      '\$${product.price.toStringAsFixed(0)}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
