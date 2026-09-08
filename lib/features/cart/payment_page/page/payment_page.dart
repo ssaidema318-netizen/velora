@@ -11,6 +11,7 @@ import 'package:velora/features/cart/payment_page/widgets/order_summary.dart';
 import 'package:velora/features/cart/payment_page/widgets/payment_method_empty.dart';
 import 'package:velora/features/cart/payment_page/widgets/payment_method_item.dart';
 import 'package:velora/features/cart/payment_page/widgets/payment_method_item_sheet.dart';
+import 'package:velora/features/cart/payment_page/widgets/show_order_success_sheet.dart';
 import 'package:velora/models/address_model.dart';
 import 'package:velora/models/payment_model.dart';
 
@@ -143,7 +144,7 @@ class PaymentPage extends StatelessWidget {
                             backgroundColor: AppColors.primary,
                           ),
                           onPressed:state.chosenAddress==null||state.chosenPayment==null?null:() {
-                            
+                             showOrderSuccessSheet(context);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(AppSpacing.md),

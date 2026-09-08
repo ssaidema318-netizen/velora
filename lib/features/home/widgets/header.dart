@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:velora/constants/app_colors.dart';
 import 'package:velora/constants/app_spacing.dart';
+import 'package:velora/features/profile/cubit/profile_cubit.dart';
 import 'package:velora/widgets/icon_botton.dart';
 
 class Header extends StatelessWidget {
-  const Header({super.key});
+  final nameUser;
+  const Header({super.key, required this.nameUser});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +27,31 @@ class Header extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      radius: avatarRadius,
-                      backgroundImage: const AssetImage(
-                        'assets/images/profile.jfif',
+                    GestureDetector(
+                      onTap: () => context
+                          .read<PersistentTabController>()
+                          .jumpToTab(4),
+                      child: BlocBuilder<ProfileCubit, ProfileState>(
+                        buildWhen: (previous, current) =>
+                            previous.userData?.photoUrl != current.userData?.photoUrl,
+                        builder: (context, profileState) {
+                          final photoUrl = profileState.userData?.photoUrl;
+
+                          return CustomPaint(
+                            painter: _RingPainter(color: AppColors.primary),
+                            child: Padding(
+                              padding: const EdgeInsets.all(3),
+                              child: CircleAvatar(
+                                radius: avatarRadius,
+                                backgroundColor: AppColors.primary,
+                                backgroundImage: photoUrl != null
+                                    ? NetworkImage(photoUrl)
+                                    : const AssetImage('assets/images/profile.jfif')
+                                        as ImageProvider,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
 
@@ -60,7 +85,7 @@ class Header extends StatelessWidget {
 
                               Flexible(
                                 child: Text(
-                                  'Said',
+                                  '$nameUser',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: Theme.of(context)
@@ -124,7 +149,7 @@ class Header extends StatelessWidget {
 
                   IconBotton(
                     icon: Icons.shopping_cart_outlined,
-                    onPressed: () {},
+                    onPressed: () {context.read<PersistentTabController>().jumpToTab(2);},
                   ),
                 ],
               ),
@@ -134,4 +159,30 @@ class Header extends StatelessWidget {
       },
     );
   }
+}
+
+class _RingPainter extends CustomPainter {
+  final Color color;
+  const _RingPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.2
+      ..strokeCap = StrokeCap.round;
+
+    final rect = Offset.zero & size;
+    // 🔥 قوس بيغطي 300 درجة بدل دائرة كاملة، بيبدأ من فوق شمال
+    // شوية ويسيب فجوة صغيرة — ده اللي بيدي شكل مختلف عن أي دايرة عادية
+    const startAngle = -2.6;
+    const sweepAngle = 5.2;
+
+    canvas.drawArc(rect.deflate(1), startAngle, sweepAngle, false, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _RingPainter oldDelegate) =>
+      oldDelegate.color != color;
 }

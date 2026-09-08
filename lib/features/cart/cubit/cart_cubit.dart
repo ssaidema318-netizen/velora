@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velora/models/add_to_cart_model.dart';
+import 'package:velora/models/product_item_model.dart';
 import 'package:velora/services/auth_services.dart';
 import 'package:velora/services/cart_services.dart';
 
@@ -169,6 +170,39 @@ class CartCubit extends Cubit<CartState> {
       );
     }
   }
+  // ─────────────────────────────────────────────
+// Add Item (used from outside product details, e.g. Favorites)
+// ─────────────────────────────────────────────
+
+Future<void> addItemFromProduct(
+  ProductItemModel product, {
+  int quantity = 1,
+}) async {
+  final currentUser = authServices.currentUser();
+
+  if (currentUser == null) {
+    emit(CartError(message: 'User is not logged in'));
+    return;
+  }
+
+  try {
+    final cartItem = AddToCartModel(
+      name: product.name,
+      productId: product.id.toString(), // 🔥 لو id عندك int أصلاً
+      quantity: quantity,
+      imageUrl: product.imageUrl,
+      price: product.price.toInt(),
+      rating: product.rating,
+      reviewCount: product.reviewCount,
+      stock: product.stock,
+    );
+
+    await cartServices.addCartItem(currentUser.uid, cartItem);
+    // 🔥 مفيش emit هنا — watchCart() الشغال أصلاً هيستقبل التحديث من الـ Stream لوحده
+  } catch (e) {
+    emit(CartError(message: e.toString()));
+  }
+}
   // ─────────────────────────────────────────────
   // Close
   // ─────────────────────────────────────────────

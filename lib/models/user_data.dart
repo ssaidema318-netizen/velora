@@ -5,8 +5,9 @@ class UserData {
   final String name;
   final String email;
   final String phone;
+  final String? photoUrl;
 
-  UserData({required this.id, required this.name, required this.email, required this.phone});
+  UserData({required this.id, required this.name, required this.email, required this.phone, this.photoUrl});
 
 
 
@@ -15,6 +16,8 @@ class UserData {
       'id': id,
       'name': name,
       'email': email,
+      'phone': phone,
+      'photoUrl':photoUrl
     };
   }
 
@@ -23,7 +26,17 @@ class UserData {
       id: map['id'] as String,
       name: map['name'] as String,
       email: map['email'] as String, 
-      phone: map['email'] as String, 
+      phone: map['phone'] as String, 
+      photoUrl: map['photoUrl'] as String?, 
+    );
+  }
+  UserData copyWith({String? photoUrl}) {
+    return UserData(
+      id: id,
+      name: name,
+      email: email,
+      phone: phone,
+      photoUrl: photoUrl ?? this.photoUrl,
     );
   }
 

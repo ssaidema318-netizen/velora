@@ -32,7 +32,7 @@ class RecommendCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            flex: 6,
+            flex: 7,
             child: Stack(
               children: [
                 Positioned.fill(
@@ -44,7 +44,7 @@ class RecommendCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18),
                       child: Image.asset(
                         product.imageUrl,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
